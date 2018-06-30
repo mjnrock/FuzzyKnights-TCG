@@ -20,6 +20,30 @@ td {
 }
 
 ul.ul-category > li,
-input[type="number"] {
+input[type="number"], 
+input[type="text"] {
 	text-align: center;
+	border-bottom: none !important;
+}
+
+input.h4[type="text"] {
+	font-size: 2.25rem !important;
+}
+
+
+.mods,
+.mods-row {
+	width: 100%;
+	display: inline-flex;
+	flex-wrap: wrap;
+	text-align: center;
+}
+.mods-cell {
+	width: calc(20% - 10px);
+	padding: 5px;
+	margin: 5px;
+	border: 1px solid #000;
+
+	min-height: 100px;
+	color: black !important;
 }

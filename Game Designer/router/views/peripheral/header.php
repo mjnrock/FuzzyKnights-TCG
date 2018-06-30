@@ -19,6 +19,20 @@
 		<title>Game Designer</title>
 	</head>
 	<body>
+		<script>			
+			function AJAX(action, content, callback) {
+				callback = !!callback ? callback : function(e){};
+				$.ajax({
+					url: "/api/ajax.php",
+					data: {
+						Action: action,
+						Payload: JSON.stringify(content)
+					},
+					success: callback
+				});
+			}
+		</script>
+
 		<nav>
 			<div class="nav-wrapper deep-purple lighten-1">
 				<ul id="nav-mobile" class="hide-on-med-and-down">

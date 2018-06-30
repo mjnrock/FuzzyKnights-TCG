@@ -6,7 +6,9 @@
 <div class="row ba b--black-20 br2 shadow-5">
 	<ul tcg="card-id" card-id="<?= $Card->ID; ?>">
 		<li>
-			<h4 tcg="card-name" class="tc"><?= $Card->Name; ?></h4>
+			<div tcg="card-name" class="tc">
+				<input class="h4" type="text" value="<?= $Card->Name; ?>" />
+			</div>
 		</li>
 		<li>
 			<img tcg="card-picture" src="<?= $Card->Picture; ?>" alt="">
@@ -24,6 +26,8 @@
 					<td tcg="card-category-task" task-id="<?= $Card->Categories->Task["ID"]; ?>">
 						<a class="dropdown-trigger btn deep-purple lighten-1" href="#" data-target="ul-tasks"><?= "{$Card->Categories->Task["Label"]} [{$Card->Categories->Task["Short"]}]"; ?></a>
 						<ul id="ul-tasks" tcg="Task" class="dropdown-content ul-category">
+							<li pkid="NULL">-- NULL --</li>
+    						<li class="divider" tabindex="-1"></li>
 							<?php foreach($Tasks as $Task): ?>
 								<li pkid="<?= $Task["TaskID"]; ?>"><?= "{$Task["Label"]} [{$Task["Short"]}]"; ?></li>
 							<?php endforeach; ?>
@@ -33,6 +37,8 @@
 					<td tcg="card-category-cardtype" task-id="<?= $Card->Categories->CardType["ID"]; ?>">
 						<a class="dropdown-trigger btn deep-purple lighten-1" href="#" data-target="ul-cardtypes"><?= "{$Card->Categories->CardType["Label"]} [{$Card->Categories->CardType["Short"]}]"; ?></a>
 						<ul id="ul-cardtypes" tcg="CardType" class="dropdown-content ul-category">
+							<li pkid="NULL">-- NULL --</li>
+    						<li class="divider" tabindex="-1"></li>
 							<?php foreach($CardTypes as $CardType): ?>
 								<li pkid="<?= $CardType["CardTypeID"]; ?>"><?= "{$CardType["Label"]} [{$CardType["Short"]}]"; ?></li>
 							<?php endforeach; ?>
@@ -42,6 +48,8 @@
 					<td tcg="card-category-discipline" task-id="<?= $Card->Categories->Discipline["ID"]; ?>">
 						<a class="dropdown-trigger btn deep-purple lighten-1" href="#" data-target="ul-disciplines"><?= "{$Card->Categories->Discipline["Label"]} [{$Card->Categories->Discipline["Short"]}]"; ?></a>
 						<ul id="ul-disciplines" tcg="Discipline" class="dropdown-content ul-category">
+							<li pkid="NULL">-- NULL --</li>
+    						<li class="divider" tabindex="-1"></li>
 							<?php foreach($Disciplines as $Discipline): ?>
 								<li pkid="<?= $Discipline["DisciplineID"]; ?>"><?= "{$Discipline["Label"]} [{$Discipline["Short"]}]"; ?></li>
 							<?php endforeach; ?>
@@ -50,7 +58,9 @@
 
 					<td tcg="card-category-requirement" task-id="<?= $Card->Categories->RequirementCardType["ID"]; ?>">
 						<a class="dropdown-trigger btn deep-purple lighten-1" href="#" data-target="ul-requirements"><?= isset($Card->Categories->RequirementCardType["ID"]) ? "{$Card->Categories->RequirementCardType["Label"]} [{$Card->Categories->RequirementCardType["Short"]}]" : "-"; ?></a>
-						<ul id="ul-requirements" tcg="Requirement" class="dropdown-content ul-category">
+						<ul id="ul-requirements" tcg="RequirementCardType" class="dropdown-content ul-category">
+							<li pkid="NULL">-- NULL --</li>
+    						<li class="divider" tabindex="-1"></li>
 							<?php foreach($Requirements as $Requirement): ?>
 								<li pkid="<?= $Requirement["CardTypeID"]; ?>"><?= "{$Requirement["Label"]} [{$Requirement["Short"]}]"; ?></li>
 							<?php endforeach; ?>
@@ -100,6 +110,110 @@
 		</li>
 		<li>
 			<h6 tcg="card-name" class="tc">Modifiers</h6>
+
+			<?php
+				function ModCell($X, $Y, $Mod) {
+					if($Mod["Target"]["X"] === $X && $Mod["Target"]["Y"] === $Y) {
+						switch($Mod["Stat"]["Action"]["Short"]) {
+							case "+":
+								$Color = "green lighten-3 black-text";
+								break;
+							case "-":
+								$Color = "red lighten-3 black-text";
+								break;
+							case "*":
+								$Color = "cyan lighten-2 black-text";
+								break;
+							case "/":
+								$Color = "pink lighten-2 black-text";
+								break;
+							case "Buff":
+								$Color = "deep-purple lighten-2 black-text";
+								break;
+							case "Debuff":
+								$Color = "indigo lighten-2 black-text";
+								break;
+							case "Base":
+								$Color = "grey darken-1 black-text";
+								break;
+							default:
+								$Color = "";
+								break;
+						}
+
+						$Range = [
+							"Min" => $Mod["Values"]["Number"] + $Mod["Values"]["Bonus"],
+							"Max" => $Mod["Values"]["Number"] * $Mod["Values"]["Sided"] + $Mod["Values"]["Bonus"],
+						];
+						$Range["Display"] = $Range["Min"] === $Range["Max"] ? "<strong>[{$Range["Max"]}]</strong>" : "[{$Range['Min']}-{$Range['Max']}]";
+
+						echo "<div class='flex w-100 {$Color}'>
+							<div class='w-25'>{$Mod['Stat']['Action']['Short']}</div>
+							<div class='w-25'>{$Mod['Stat']['Short']}</div>
+							<div class='w-25'>{$Range["Display"]}</div>
+							<div class='w-25'>" . ($Mod['Values']['Lifespan'] === -1 ? '&#x221e;' : $Mod['Values']['Lifespan']) . "</div>
+						</div>";
+					}
+				}
+			?>
+
+			<div class="mods">
+				<div class="mods-row">
+					<div class="mods-cell red lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(-2, 1, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+					<div class="mods-cell red lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(-1, 1, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+					<div class="mods-cell red lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(0, 1, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+					<div class="mods-cell red lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(1, 1, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+					<div class="mods-cell red lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(2, 1, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+				</div>
+				<div class="mods-row">
+					<div class="mods-cell green lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(-2, 0, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+					<div class="mods-cell green lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(-1, 0, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+					<div class="mods-cell bw2 green lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(0, 0, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+					<div class="mods-cell green lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(1, 0, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+					<div class="mods-cell green lighten-5">
+						<?php foreach($Card->Modifiers as $Mod): ?>
+							<?php ModCell(2, 0, $Mod); ?>
+						<?php endforeach; ?>
+					</div>
+				</div>
+			</div>
+
 			<ul class="collection ml3 mr3 br2 shadow-3">
 				<?php foreach($Card->Modifiers as $i => $Modifier): ?>
 					<li class="collection-item">
@@ -165,10 +279,31 @@
   		$(".dropdown-trigger").dropdown();
 
 		$(".ul-category > li").on("click", function(e) {
-			console.log([$(this).parent().attr("tcg"), $(this).attr("pkid")]);
+			AJAX("UpdateTask", {
+				CardID: $("ul[tcg=card-id]").attr("card-id"),
+				Table: $(this).parent().attr("tcg"),
+				PKID: $(this).attr("pkid")
+			}, (e) => {
+				location.reload();
+			});
 		});
-		$("td[tcg=card-stat] > input[type=number]").on("change", function(e) {
-			console.log([$(this).val(), $(this).parent().attr("code")]);
+		$("[tcg=card-stat] > input[type=number]").on("blur", function(e) {
+			AJAX("UpdateStat", {
+				CardID: $("ul[tcg=card-id]").attr("card-id"),
+				Key: $(this).parent().attr("code"),
+				Value: $(this).val()
+			}, (e) => {
+				location.reload();
+			});
+		});
+
+		$("[tcg=card-name] > input[type=text]").on("change", function(e) {
+			AJAX("UpdateName", {
+				CardID: $("ul[tcg=card-id]").attr("card-id"),
+				Name: $(this).val()
+			}, (e) => {
+				location.reload();
+			});
 		});
 	});
 </script>
