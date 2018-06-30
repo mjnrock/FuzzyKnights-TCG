@@ -14,6 +14,12 @@
 			Display::UpdateStat($Payload);
 		} else if($_GET["Action"] === "UpdateModifier") {
 			Display::UpdateModifier($Payload);
+		} else if($_GET["Action"] === "UpdateModifierState") {
+			Display::UpdateModifierState($Payload);
+		}
+
+		if($_GET["Action"] === "CardUpdateState") {
+			Display::CardUpdateState($Payload);
 		}
 	}
 
@@ -44,18 +50,24 @@ SQL;
 			$SQL = <<<SQL
 			UPDATE TCG.CardCategorization
 			SET
-				{$Payload->Table}ID = {$Payload->PKID},
+				{$Payload->Column}ID = {$Payload->PKID},
 				ModifiedDateTime = GETDATE()
 			OUTPUT
 				Inserted.CardID,
-				Inserted.{$Payload->Table}ID AS PKID
+				'{$Payload->Table}' AS 'Table',
+				'{$Payload->Column}' AS 'Column',
+				Inserted.{$Payload->Column}ID AS PKID
 			WHERE
 				CardID = {$Payload->CardID}
 SQL;
-			if(isset($Payload->CardID) && isset($Payload->Table) && isset($Payload->PKID)) {
+			if(isset($Payload->CardID) && isset($Payload->Table) && isset($Payload->Column) && isset($Payload->PKID)) {
 				$result = API::query($SQL);
+				$lookup = API::query("SELECT * FROM TCG.{$Payload->Table}");
 
-				echo json_encode($result);
+				echo json_encode([
+					"Result" => $result,
+					"Lookup" => $lookup
+				]);
 			}
 		}
 
@@ -85,21 +97,127 @@ SQL;
 		}
 
 		public static function UpdateModifier($Payload) {
-			$SQL = <<<SQL
-			UPDATE TCG.CardStatModifier
-			SET
-				{$Payload->Table}ID = {$Payload->PKID},
-				ModifiedDateTime = GETDATE()
-			OUTPUT
-				Inserted.CardStatModifierID,
-				Inserted.{$Payload->Table}ID
-			WHERE
-				CardStatModifierID = {$Payload->CardStatModifierID}
+			if(isset($Payload->CardStatModifierID)) {
+				if(isset($Payload->PKID) && isset($Payload->Table)) {
+					$SQL = <<<SQL
+					UPDATE TCG.CardStatModifier
+					SET
+						{$Payload->Table}ID = {$Payload->PKID},
+						ModifiedDateTime = GETDATE()
+					OUTPUT
+						Inserted.CardStatModifierID,
+						'{$Payload->Table}' AS 'Table',
+						Inserted.{$Payload->Table}ID AS PKID
+					WHERE
+						CardStatModifierID = {$Payload->CardStatModifierID}
 SQL;
-			echo $SQL;
-			if(isset($Payload->CardStatModifierID) && isset($Payload->Table) && isset($Payload->PKID)) {
-				$result = API::query($SQL);
 
+					$result = API::query($SQL);
+					$lookup = API::query("SELECT * FROM TCG.{$Payload->Table}");
+
+					echo json_encode([
+						"Result" => $result,
+						"Lookup" => $lookup
+					]);
+				} else if(isset($Payload->Key) && isset($Payload->Value)) {
+					$SQL = <<<SQL
+					UPDATE TCG.CardStatModifier
+					SET
+						{$Payload->Key} = {$Payload->Value},
+						ModifiedDateTime = GETDATE()
+					OUTPUT
+						Inserted.CardStatModifierID,
+						'{$Payload->Key}' AS 'Key',
+						Inserted.{$Payload->Key} AS 'Value'
+					WHERE
+						CardStatModifierID = {$Payload->CardStatModifierID}
+SQL;
+					$result = API::query($SQL);
+					
+					echo json_encode($result);
+				}
+			}
+		}
+
+		
+		public static function UpdateModifierState($Payload) {
+			if(isset($Payload->Action)) {
+				if(isset($Payload->CardStatModifierID)) {
+					if($Payload->Action === "DeActivate") {
+						$SQL = <<<SQL
+						UPDATE TCG.CardStatModifier
+						SET
+							DeactivatedDateTime = CASE
+								WHEN DeactivatedDateTime IS NULL THEN GETDATE()
+								ELSE NULL
+							END,
+							ModifiedDateTime = GETDATE()
+						OUTPUT
+							Inserted.CardStatModifierID,
+							CASE
+								WHEN Inserted.DeactivatedDateTime IS NULL THEN 1
+								ELSE 0
+							END AS ModifierIsActive
+						WHERE
+							CardStatModifierID = {$Payload->CardStatModifierID}
+SQL;
+					} else if($Payload->Action === "Delete") {
+						$SQL = <<<SQL
+						DELETE FROM TCG.CardStatModifier
+						WHERE
+							CardStatModifierID = {$Payload->CardStatModifierID};
+SQL;
+					}
+				} else {
+					if(isset($Payload->CardID) && $Payload->Action === "Add") {
+						$SQL = <<<SQL
+						INSERT INTO TCG.CardStatModifier (CardID, StatID, StatActionID, TargetID, Lifespan, Number, Sided, Bonus, Stage, Step)
+						VALUES
+							($Payload->CardID, 1, 1, 1, 0, 0, 0, 0, 99, 99);
+SQL;
+					} 
+				}
+				
+				$result = API::query($SQL);
+				
+				echo json_encode($result);
+			}
+		}
+
+		public static function CardUpdateState($Payload) {
+			if(isset($Payload->Action)) {
+				if(isset($Payload->CardID)) {
+					if($Payload->Action === "DeActivate") {
+						$SQL = <<<SQL
+						UPDATE TCG.Card
+						SET
+							DeactivatedDateTime = CASE
+								WHEN DeactivatedDateTime IS NULL THEN GETDATE()
+								ELSE NULL
+							END,
+							ModifiedDateTime = GETDATE()
+						OUTPUT
+							Inserted.CardID,
+							CASE
+								WHEN Inserted.DeactivatedDateTime IS NULL THEN 1
+								ELSE 0
+							END AS IsActive
+						WHERE
+							CardID = {$Payload->CardID}
+SQL;
+					} else if($Payload->Action === "Delete") {
+						$SQL = <<<SQL
+						DELETE FROM TCG.Card
+						OUTPUT
+							Deleted.CardID
+						WHERE
+							CardID = {$Payload->CardID};
+SQL;
+					}
+				}
+				
+				$result = API::query($SQL);
+				
 				echo json_encode($result);
 			}
 		}

@@ -14,6 +14,10 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
 
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/materialize.min.js"></script>
+		<script src="/assets/js/jquery.dataTables.min.js"></script>
+
 		<link rel="stylesheet" href="/assets/css/card.css" />
 
 		<title>Game Designer</title>

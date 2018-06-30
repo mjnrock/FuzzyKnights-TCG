@@ -8,5 +8,5 @@
 	$Stats = API::Stat(NULL, NULL, NULL, "Label");
 	$StatActions = API::StatAction(NULL, NULL, NULL, "Label");
 
-	require_once "{$_SERVER["DOCUMENT_ROOT"]}/router/partials/card.php";
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/router/partials/card/card.php";
 ?>

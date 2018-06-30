@@ -487,6 +487,10 @@ SELECT
 	c.Name,
 	c.Picture,
 	c.CardID,
+	CASE
+		WHEN c.DeactivatedDateTime IS NULL THEN 1
+		ELSE 0
+	END AS IsActive,
 	cc.*,
 	s.StatID,
 	s.Short AS StatShort,
@@ -506,6 +510,10 @@ SELECT
 	csm.Bonus,
 	csm.Stage,
 	csm.Step,
+	CASE
+		WHEN csm.DeactivatedDateTime IS NULL THEN 1
+		ELSE 0
+	END AS ModifierIsActive,
 	cs.*
 FROM
 	TCG.[Card] c WITH (NOLOCK)
@@ -603,6 +611,10 @@ RETURN
 		c.Name,
 		c.Picture,
 		c.CardID,
+		CASE
+			WHEN c.DeactivatedDateTime IS NULL THEN 1
+			ELSE 0
+		END AS IsActive,
 		cc.*,
 		s.StatID,
 		s.Short AS StatShort,
@@ -622,6 +634,10 @@ RETURN
 		csm.Bonus,
 		csm.Stage,
 		csm.Step,
+		CASE
+			WHEN csm.DeactivatedDateTime IS NULL THEN 1
+			ELSE 0
+		END AS ModifierIsActive,
 		cs.*
 	FROM
 		TCG.[Card] c WITH (NOLOCK)
@@ -701,4 +717,59 @@ RETURN
 	WHERE
 		c.CardID = @CardID
 )
+GO
+
+
+
+CREATE PROCEDURE TCG.QuickCreateCard
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @Card TABLE (CardID INT, CardStatID INT, CardCategorizationID INT, CardStatModifierID INT);
+
+	INSERT INTO TCG.[Card] (Name, DeactivatedDateTime)
+	OUTPUT
+		Inserted.CardID INTO @Card (CardID)
+	VALUES
+		(CAST(NEWID() AS VARCHAR(255)), GETDATE());
+
+	DECLARE @CardID INT = (SELECT CardID FROM @Card);
+
+
+	INSERT INTO TCG.CardStat (CardID, StatID, Value)
+	OUTPUT
+		Inserted.CardStatID INTO @Card (CardStatID)
+	SELECT
+		@CardID,
+		s.StatID,
+		0
+	FROM
+		TCG.Stat s WITH (NOLOCK);
+
+
+	INSERT INTO TCG.CardCategorization(CardID, TaskID, CardTypeID, DisciplineID, RequirementCardTypeID)
+	OUTPUT
+		Inserted.CardCategorizationID INTO @Card (CardCategorizationID)
+	SELECT
+		@CardID,
+		1,
+		1,
+		1,
+		NULL;
+
+
+	INSERT INTO TCG.CardStatModifier (CardID, StatID, StatActionID, TargetID, Lifespan, Number, Sided, Bonus, Stage, Step)
+	OUTPUT
+		Inserted.CardStatModifierID INTO @Card (CardStatModifierID)
+	VALUES
+		(@CardID, 1, 1, 1, 0, 0, 0, 0, 99, 99);
+
+	SELECT
+		MAX(CardID) AS CardID,
+		MAX(CardCategorizationID) AS CardCategorizationID,
+		MAX(CardStatModifierID) AS CardStatModifierID
+	FROM
+		@Card;
+END
 GO

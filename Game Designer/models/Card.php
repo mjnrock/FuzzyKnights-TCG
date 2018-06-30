@@ -6,20 +6,69 @@
 		public $ID;
 		public $Name;
 		public $Picture;
+		public $IsActive;
 
 		public $Categories;
 		public $Stats;
 
 		public $Modifiers = [];
 
+		public $ColorLookup = [
+			"Task" => [
+				"A" => "blue-text text-darken-4",
+				"E" => "green-text text-darken-4",
+				"Q" => "brown-text",
+				"I" => "deep-purple-text text-accent-2"
+			],
+			"Discipline" => [
+				"M" => "deep-purple-text text-darken-3",
+				"P" => "grey-text text-darken-2",
+				"H" => "cyan-text text-darken-2"
+			],
+			"Target" => [
+				"Friendly" => "green-text text-lighten-1",
+				"Enemy" => "red-text text-lighten-1"
+			],
+			"Stat" => [
+				"STR" => "red-text text-darken-4",
+				"TGH" => "orange-text text-darken-3",
+				"PWR" => "deep-purple-text text-darken-3",
+				"RES" => "indigo-text text-lighten-2",
+				"HP" => "green-text text-darken-3",
+				"MP" => "light-blue-text text-darken-1",
+				"DUR" => "grey-text text-darken-1",
+			],
+			"StatAction" => [
+				"Background" => [
+					"+" => "green lighten-3 grey-text text-darken-3",
+					"-" => "red lighten-3 grey-text text-darken-3",
+					"*" => "cyan lighten-2 grey-text text-darken-3",
+					"/" => "pink lighten-2 grey-text text-darken-3",
+					"Buff" => "deep-purple lighten-2 grey-text text-darken-3",
+					"Debuff" => "indigo lighten-2 grey-text text-darken-3",
+					"Base" => "grey darken-1 grey-text text-darken-3"
+				],
+				"Foreground" => [
+					"+" => "green-text text-lighten-3",
+					"-" => "red-text text-lighten-3",
+					"*" => "cyan-text text-lighten-2",
+					"/" => "pink-text text-lighten-2",
+					"Buff" => "deep-purple-text text-lighten-2",
+					"Debuff" => "indigo-text text-lighten-2",
+					"Base" => "grey-text text-darken-1"
+				]
+			]
+		];
+
 		public function __construct($Card) {
 			$this->SetCard($Card);
 		}
 
 		public function SetCard($Card) {			
-			$this->ID = $Card[0]["CardID"];
+			$this->ID = (int)$Card[0]["CardID"];
 			$this->Name = $Card[0]["Name"];
 			$this->Picture = $Card[0]["Picture"];
+			$this->IsActive = (int)$Card[0]["IsActive"];
 
 			$this->Categories = new Categories($Card);
 			$this->Stats = new Stats($Card);
@@ -32,6 +81,7 @@
 				];
 				
 				$this->Modifiers[$i]["CardStatModifierID"] = (int)$Mod["CardStatModifierID"];
+				$this->Modifiers[$i]["IsActive"] = (int)$Mod["ModifierIsActive"] === 1 ? TRUE : FALSE;
 				$this->Modifiers[$i]["Stat"]["ID"] = (int)$Mod["StatID"];
 				$this->Modifiers[$i]["Stat"]["Short"] = $Mod["StatShort"];
 				$this->Modifiers[$i]["Stat"]["Label"] = $Mod["StatLabel"];

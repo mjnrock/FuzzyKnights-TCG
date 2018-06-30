@@ -19,6 +19,14 @@ td {
 	text-align: center !important;
 }
 
+table > tbody > tr:hover {
+	background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+td.table-actions i.material-icons {
+	width: 20px;
+}
+
 ul.ul-category > li,
 ul.ul-modifier > li,
 input[type="number"], 
@@ -40,11 +48,16 @@ input.h4[type="text"] {
 	text-align: center;
 }
 .mods-cell {
-	border-radius: 3px;
 	width: calc(20% - 10px);
 	margin: 5px;
-	border: 1px solid #000;
 
 	min-height: 100px;
-	color: black !important;
+}
+
+a[tcg=Task],
+a[tcg=Discipline],
+a[tcg=Target],
+a[tcg=Stat],
+a[tcg=StatAction] {
+	font-weight: bold;
 }
