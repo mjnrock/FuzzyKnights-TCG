@@ -590,7 +590,8 @@ GO
 
 
 
-CREATE FUNCTION TCG.GetCard
+
+CREATE FUNCTION [TCG].[GetCard]
 (	
 	@CardID INT
 )
@@ -599,10 +600,105 @@ AS
 RETURN 
 (
 	SELECT
-		*
+		c.Name,
+		c.Picture,
+		c.CardID,
+		cc.*,
+		s.StatID,
+		s.Short AS StatShort,
+		s.Label AS StatLabel,
+		sa.Short AS StatActionShort,
+		sa.Label AS StatActionLabel,
+		t.TargetID,
+		t.X,
+		t.Y,
+		t.IsFriendly,
+		t.Short AS TargetShort,
+		t.Label AS TargetLabel,
+		csm.CardStatModifierID,
+		csm.Lifespan,
+		csm.Number,
+		csm.Sided,
+		csm.Bonus,
+		csm.Stage,
+		csm.Step,
+		cs.*
 	FROM
-		TCG.vwCardStatModifier csm
+		TCG.[Card] c WITH (NOLOCK)
+		INNER JOIN TCG.CardStatModifier csm WITH (NOLOCK)
+			ON c.CardID = csm.CardID
+		INNER JOIN TCG.Stat s WITH (NOLOCK)
+			ON csm.StatID = s.StatID
+		INNER JOIN TCG.StatAction sa WITH (NOLOCK)
+			ON csm.StatActionID = sa.StatActionID
+		INNER JOIN TCG.[Target] t WITH (NOLOCK)
+			ON csm.TargetID = t.TargetID
+		INNER JOIN (
+			SELECT
+				cc.CardID AS CardCategorizationCardID,
+				t.TaskID,
+				t.Short AS TaskShort,
+				t.Label AS TaskLabel,
+				ct.CardTypeID,
+				ct.Short AS CardTypeShort,
+				ct.Label AS CardTypeLabel,
+				d.DisciplineID,
+				d.Short AS DisciplineShort,
+				d.Label AS DisciplineLabel,
+				ctr.CardTypeID AS RequirementCardTypeID,
+				ctr.Short AS RequirementCardTypeShort,
+				ctr.Label AS RequirementCardTypeLabel
+			FROM
+				TCG.CardCategorization cc WITH (NOLOCK)
+				INNER JOIN TCG.CardType ct WITH (NOLOCK)
+					ON cc.CardTypeID = ct.CardTypeID
+				INNER JOIN TCG.Task t WITH (NOLOCK)
+					ON cc.TaskID = t.TaskID
+				INNER JOIN TCG.Discipline d WITH (NOLOCK)
+					ON cc.DisciplineID = d.DisciplineID
+				LEFT JOIN TCG.CardType ctr WITH (NOLOCK)
+					ON cc.RequirementCardTypeID = ctr.CardTypeID
+		) cc
+			ON c.CardID = cc.CardCategorizationCardID
+		FULL OUTER JOIN (
+			SELECT
+				CardID AS CardStatCardID,
+				MAX(CASE
+					WHEN StatID = 1 THEN Value
+					ELSE 0
+				END) AS Strength,
+				MAX(CASE
+					WHEN StatID = 2 THEN Value
+					ELSE 0
+				END) AS Toughness,
+				MAX(CASE
+					WHEN StatID = 3 THEN Value
+					ELSE 0
+				END) AS 'Power',
+				MAX(CASE
+					WHEN StatID = 4 THEN Value
+					ELSE 0
+				END) AS Resistance,
+				MAX(CASE
+					WHEN StatID = 5 THEN Value
+					ELSE 0
+				END) AS Health,
+				MAX(CASE
+					WHEN StatID = 6 THEN Value
+					ELSE 0
+				END) AS Mana,
+				MAX(CASE
+					WHEN StatID = 7 THEN Value
+					ELSE 0
+				END) AS 'Durability'
+			FROM
+				TCG.CardStat cs WITH (NOLOCK)
+			GROUP BY
+				CardID
+		) cs
+			ON
+				c.CardID = cs.CardStatCardID
 	WHERE
-		csm.CardID = @CardID
+		c.CardID = @CardID
 )
 GO

@@ -16,5 +16,10 @@ h6 {
 
 th,
 td {
+	text-align: center !important;
+}
+
+ul.ul-category > li,
+input[type="number"] {
 	text-align: center;
 }

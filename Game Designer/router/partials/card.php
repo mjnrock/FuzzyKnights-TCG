@@ -21,14 +21,41 @@
 					<th>Requirement</th>
 				</thead>
 				<tbody>
-					<td tcg="card-category-task" task-id="<?= $Card->Categories->Task["ID"]; ?>"><?= "{$Card->Categories->Task["Label"]} [{$Card->Categories->Task["Short"]}]"; ?></td>
-					<td tcg="card-category-cardtype" cardtype-id="<?= $Card->Categories->CardType["ID"]; ?>"><?= "{$Card->Categories->CardType["Label"]} [{$Card->Categories->CardType["Short"]}]"; ?></td>
-					<td tcg="card-category-discipline" discipline-id="<?= $Card->Categories->Discipline["ID"]; ?>"><?= "{$Card->Categories->Discipline["Label"]} [{$Card->Categories->Discipline["Short"]}]"; ?></td>
-					<?php if(isset($Card->Categories->RequirementCardType["ID"])): ?>
-						<td tcg="card-category-requirement" requirement-id="<?= $Card->Categories->RequirementCardType["ID"]; ?>"><?= "{$Card->Categories->RequirementCardType["Label"]} [{$Card->Categories->RequirementCardType["Short"]}]"; ?></td>
-					<?php else: ?>
-						<td tcg="card-category-requirement">-</td>
-					<?php endif; ?>
+					<td tcg="card-category-task" task-id="<?= $Card->Categories->Task["ID"]; ?>">
+						<a class="dropdown-trigger btn deep-purple lighten-1" href="#" data-target="ul-tasks"><?= "{$Card->Categories->Task["Label"]} [{$Card->Categories->Task["Short"]}]"; ?></a>
+						<ul id="ul-tasks" tcg="Task" class="dropdown-content ul-category">
+							<?php foreach($Tasks as $Task): ?>
+								<li pkid="<?= $Task["TaskID"]; ?>"><?= "{$Task["Label"]} [{$Task["Short"]}]"; ?></li>
+							<?php endforeach; ?>
+						</ul>					
+					</td>
+
+					<td tcg="card-category-cardtype" task-id="<?= $Card->Categories->CardType["ID"]; ?>">
+						<a class="dropdown-trigger btn deep-purple lighten-1" href="#" data-target="ul-cardtypes"><?= "{$Card->Categories->CardType["Label"]} [{$Card->Categories->CardType["Short"]}]"; ?></a>
+						<ul id="ul-cardtypes" tcg="CardType" class="dropdown-content ul-category">
+							<?php foreach($CardTypes as $CardType): ?>
+								<li pkid="<?= $CardType["CardTypeID"]; ?>"><?= "{$CardType["Label"]} [{$CardType["Short"]}]"; ?></li>
+							<?php endforeach; ?>
+						</ul>					
+					</td>
+
+					<td tcg="card-category-discipline" task-id="<?= $Card->Categories->Discipline["ID"]; ?>">
+						<a class="dropdown-trigger btn deep-purple lighten-1" href="#" data-target="ul-disciplines"><?= "{$Card->Categories->Discipline["Label"]} [{$Card->Categories->Discipline["Short"]}]"; ?></a>
+						<ul id="ul-disciplines" tcg="Discipline" class="dropdown-content ul-category">
+							<?php foreach($Disciplines as $Discipline): ?>
+								<li pkid="<?= $Discipline["DisciplineID"]; ?>"><?= "{$Discipline["Label"]} [{$Discipline["Short"]}]"; ?></li>
+							<?php endforeach; ?>
+						</ul>					
+					</td>
+
+					<td tcg="card-category-requirement" task-id="<?= $Card->Categories->RequirementCardType["ID"]; ?>">
+						<a class="dropdown-trigger btn deep-purple lighten-1" href="#" data-target="ul-requirements"><?= isset($Card->Categories->RequirementCardType["ID"]) ? "{$Card->Categories->RequirementCardType["Label"]} [{$Card->Categories->RequirementCardType["Short"]}]" : "-"; ?></a>
+						<ul id="ul-requirements" tcg="Requirement" class="dropdown-content ul-category">
+							<?php foreach($Requirements as $Requirement): ?>
+								<li pkid="<?= $Requirement["CardTypeID"]; ?>"><?= "{$Requirement["Label"]} [{$Requirement["Short"]}]"; ?></li>
+							<?php endforeach; ?>
+						</ul>
+					</td>
 				</tbody>
 			</table>
 		</li>
@@ -46,13 +73,27 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td tcg="card-stat-strength"><?= $Card->Stats->Strength; ?></td>
-						<td tcg="card-stat-toughness"><?= $Card->Stats->Toughness; ?></td>
-						<td tcg="card-stat-power"><?= $Card->Stats->Power; ?></td>
-						<td tcg="card-stat-resistance"><?= $Card->Stats->Resistance; ?></td>
-						<td tcg="card-stat-health"><?= $Card->Stats->Health; ?></td>
-						<td tcg="card-stat-mana"><?= $Card->Stats->Mana; ?></td>
-						<td tcg="card-stat-durability"><?= $Card->Stats->Durability; ?></td>
+						<td tcg="card-stat" code="STR">
+							<input type="number" value="<?= $Card->Stats->Strength; ?>" />
+						</td>
+						<td tcg="card-stat" code="TGH">
+							<input type="number" value="<?= $Card->Stats->Toughness; ?>" />
+						</td>
+						<td tcg="card-stat" code="PWR">
+							<input type="number" value="<?= $Card->Stats->Power; ?>" />
+						</td>
+						<td tcg="card-stat" code="RES">
+							<input type="number" value="<?= $Card->Stats->Resistance; ?>" />
+						</td>
+						<td tcg="card-stat" code="HP">
+							<input type="number" value="<?= $Card->Stats->Health; ?>" />
+						</td>
+						<td tcg="card-stat" code="MP">
+							<input type="number" value="<?= $Card->Stats->Mana; ?>" />
+						</td>
+						<td tcg="card-stat" code="DUR">
+							<input type="number" value="<?= $Card->Stats->Durability; ?>" />
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -118,3 +159,16 @@
 		</li>
 	</ul>
 </div>
+
+<script>
+	$(document).ready(function() {
+  		$(".dropdown-trigger").dropdown();
+
+		$(".ul-category > li").on("click", function(e) {
+			console.log([$(this).parent().attr("tcg"), $(this).attr("pkid")]);
+		});
+		$("td[tcg=card-stat] > input[type=number]").on("change", function(e) {
+			console.log([$(this).val(), $(this).parent().attr("code")]);
+		});
+	});
+</script>

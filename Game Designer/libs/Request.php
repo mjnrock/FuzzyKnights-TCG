@@ -2,22 +2,36 @@
 	class Request {
 		public $URI;
 		public $Verb;
-		public $Path;
-		public $Queries;
+		public $Params;
+		public $Variables;
+		public $Query;
 
-		function __constructor($verb, $path, $queries) {
-			print_r($verb);
+		public function __construct($route, $uri, $verb, $params, $queries) {
 			$this->URI = $uri;
 			$this->Verb = $verb;
-			$this->Path = $path;
-			$this->Queries = $queries;
+			$this->Params = $params;
+			$this->Variables = $this->GetVariables($route);
+			$this->Query = $queries;
 		}
 
-		function GetResult() {
-			return [
-				"Path" => $this->Path,
-				"Queries" => $this->queries
-			];
+		public function GetVariables($route) {
+			if($route[0] === "/") {
+				$route = substr($route, 1);
+			}
+			$route = explode("/", $route);
+
+			if(sizeof($route) !== sizeof($this->Params)) {
+				return [];
+			}
+			
+			$vars = [];
+			foreach($route as $i => $r) {
+				if(substr($r, 0, 1) === ":") {
+					$vars[substr($r, 1)] = $this->Params[$i];
+				}
+			}
+
+			return $vars;
 		}
 	}
 ?>

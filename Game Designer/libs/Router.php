@@ -3,28 +3,37 @@
 
 	abstract class Router {
 		public static $Server;
+		public static $LastRequest;
 
 		public static function SetServer($server) {
 			Router::$Server = $server;
+		}
+
+		public static function GetRequestURI() {
+			return Router::$Server["REQUEST_URI"];
 		}
 
 		public static function GetVerb() {
 			return Router::$Server["REQUEST_METHOD"];
 		}
 
-		public static function GetPath() {
+		public static function GetParams() {
 			return explode("/", substr(Router::$Server["PATH_INFO"], 1));	// Removes the preceding "/" via substr()
 		}
 
 		public static function GetQuery() {
-			$temps = explode("&", Router::$Server["QUERY_STRING"]);
-			$queries = [];
-			foreach($temps as $temp) {
-				$t = explode("=", $temp);
-				$queries[$t[0]] = $t[1];
+			if(isset(Router::$Server["QUERY_STRING"])) {
+				$temps = explode("&", Router::$Server["QUERY_STRING"]);
+				$queries = [];
+				foreach($temps as $temp) {
+					$t = explode("=", $temp);
+					$queries[$t[0]] = $t[1];
+				}
+
+				return $queries;
 			}
 
-			return $queries;
+			return [];
 		}
 
 		public static function CheckRoute($request, $route) {
@@ -33,12 +42,15 @@
 			}
 			$route = explode("/", $route);
 
+			if(sizeof($route) !== sizeof($request->Params)) {
+				return false;
+			}
+
 			foreach($route as $i => $r) {
-				echo "<p>{$r} | {$request->Path}</p>";
 				if(substr($r, 0, 1) === ":") {
-					
+					// NOOP
 				} else {
-					if($request->Path[$i] !== $r) {
+					if($request->Params[$i] !== $r) {
 						return false;
 					}
 				}
@@ -46,24 +58,20 @@
 
 			return true;
 		}
+		
+		public static function GrabRequest($route) {
+			return Router::$LastRequest;
+		}
 
-		public static function Route($verbs, $route, $fn) {
-			// if(in_array(Router::GetVerb(), explode("|", strtoupper($verbs)))) {
-			// 	if(TRUE) {
-			// 	// if($route) {
-			// 		$fn();
-			// 	}
-			// }
-
-			$Request = new Request(Router::GetVerb(), Router::GetPath(), Router::GetQuery());
-			print_r($Request);
-			if(Router::CheckRoute($Request, $route)) {
-				$fn();
+		public static function Route($verbs, $route, $callback = NULL) {
+			Router::$LastRequest = new Request($route, Router::GetRequestURI(), Router::GetVerb(), Router::GetParams(), Router::GetQuery());
+			if(Router::CheckRoute(Router::$LastRequest, $route) && is_callable($callback)) {
+				$callback(Router::$LastRequest);
 			}
 		}
 
-		public static function Get($route, $fn) {
-			Router::Route("GET", $route, $fn);
+		public static function Get($route, $callback) {
+			Router::Route("GET", $route, $callback);
 		}
 		public static function QuickGet($route, $URI) {
 			Router::Route("GET", $route, (function() use ($URI) {
@@ -72,7 +80,7 @@
 		}
 
 		public static function SimpleRoute($paths, $invoke) {
-			$Route = new Route(Router::GetVerb(), Router::GetPath(), Router::GetQuery());
+			$Route = new Route(Router::GetVerb(), Router::GetParams(), Router::GetQuery());
 			
 			$queries = [];
 
@@ -81,26 +89,26 @@
 			}
 			$paths = explode("/", $paths);
 
-			if(sizeof($path) !== sizeof($GetPath)) {
+			if(sizeof($path) !== sizeof($GetParams)) {
 				return false;
 			}
 			
 			foreach($paths as $i => $path) {
 				if(substr($path, 0, 1) === ":") {
 					// Query Variable
-					$queries[substr($path, 1)] = $GetPath[$i];
+					$queries[substr($path, 1)] = $GetParams[$i];
 				}
 			}
 
-			echo "<pre>";
-			print_r($route);
-			echo "<br />";
-			print_r(Router::GetVerb());
-			echo "<br />";
-			print_r(Router::GetPath());
-			echo "<br />";
-			print_r(Router::GetQuery());
-			echo "</pre>";
+			// echo "<pre>";
+			// print_r($route);
+			// echo "<br />";
+			// print_r(Router::GetVerb());
+			// echo "<br />";
+			// print_r(Router::GetParams());
+			// echo "<br />";
+			// print_r(Router::GetQuery());
+			// echo "</pre>";
 		}
 	}
 ?>

@@ -51,9 +51,8 @@
 			pageLength: 100
 		});
 
-		$("tr").on("click", function () {
-			console.log($(this).attr("card-id"));
-			console.log(table.row(this).data());
+		$("tr").on("dblclick", function () {
+			window.location.href = `/card/${$(this).attr("card-id")}`;
 		});
 	});
 </script>
