@@ -20,6 +20,7 @@ td {
 }
 
 ul.ul-category > li,
+ul.ul-modifier > li,
 input[type="number"], 
 input[type="text"] {
 	text-align: center;
@@ -39,8 +40,8 @@ input.h4[type="text"] {
 	text-align: center;
 }
 .mods-cell {
+	border-radius: 3px;
 	width: calc(20% - 10px);
-	padding: 5px;
 	margin: 5px;
 	border: 1px solid #000;
 

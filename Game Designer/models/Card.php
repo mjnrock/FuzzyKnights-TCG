@@ -31,6 +31,7 @@
 					"Values" => [],
 				];
 				
+				$this->Modifiers[$i]["CardStatModifierID"] = (int)$Mod["CardStatModifierID"];
 				$this->Modifiers[$i]["Stat"]["ID"] = (int)$Mod["StatID"];
 				$this->Modifiers[$i]["Stat"]["Short"] = $Mod["StatShort"];
 				$this->Modifiers[$i]["Stat"]["Label"] = $Mod["StatLabel"];

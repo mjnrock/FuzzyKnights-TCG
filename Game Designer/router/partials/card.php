@@ -221,28 +221,53 @@
 							<div class="col s6">
 								<div>
 									<i class="material-icons">insert_chart</i>
-									<span><?= "{$Modifier["Stat"]["Label"]} [{$Modifier["Stat"]["Short"]}]"; ?></span>
+									<a class="dropdown-trigger btn deep-purple lighten-2" href="#" data-target="ul-modifier-stat-<?= $i; ?>"><?= "{$Modifier["Stat"]["Label"]} [{$Modifier["Stat"]["Short"]}]"; ?></a>
+									<ul id="ul-modifier-stat-<?= $i; ?>" tcg="Stat" class="dropdown-content ul-modifier" csm-id="<?= $Modifier["CardStatModifierID"];?>">
+										<li pkid="NULL">-- NULL --</li>
+										<li class="divider" tabindex="-1"></li>
+										<?php foreach($Stats as $Stat): ?>
+											<li pkid="<?= $Stat["StatID"]; ?>"><?= "{$Stat["Label"]} [{$Stat["Short"]}]"; ?></li>
+										<?php endforeach; ?>
+									</ul>
 								</div>
 							</div>
 							<div class="col s6">
 								<div>
 									<i class="material-icons">call_split</i>
-									<span><?= "{$Modifier["Stat"]["Action"]["Label"]} [{$Modifier["Stat"]["Action"]["Short"]}]"; ?></span>
+									<a class="dropdown-trigger btn deep-purple lighten-2" href="#" data-target="ul-modifier-stat-action-<?= $i; ?>"><?= "{$Modifier["Stat"]["Action"]["Label"]} [{$Modifier["Stat"]["Action"]["Short"]}]"; ?></a>
+									<ul id="ul-modifier-stat-action-<?= $i; ?>" tcg="StatAction" class="dropdown-content ul-modifier" csm-id="<?= $Modifier["CardStatModifierID"];?>">
+										<li pkid="NULL">-- NULL --</li>
+										<li class="divider" tabindex="-1"></li>
+										<?php foreach($StatActions as $StatAction): ?>
+											<li pkid="<?= $StatAction["StatActionID"]; ?>"><?= "{$StatAction["Label"]} [{$StatAction["Short"]}]"; ?></li>
+										<?php endforeach; ?>
+									</ul>
 								</div>
 							</div>
 						</div>
 							
-						<div class="row black-text <?= $Modifier["Target"]["IsFriendly"] ? "green lighten-3" : "red lighten-3"; ?>" tcg="card-modifier-target" statid="<?= $Modifier["Target"]["ID"]; ?>">
+						<div class="row black-text" tcg="card-modifier-target" statid="<?= $Modifier["Target"]["ID"]; ?>">
 							<div class="col s6">
 								<div>
 									<i class="material-icons">location_on</i>
-									<span><?= "{$Modifier["Target"]["X"]}, {$Modifier["Target"]["Y"]}"; ?></span>
+									<div class="flex">
+										<input type="number" tcg="target-x" value="<?= "{$Modifier["Target"]["X"]}"; ?>" placeholder="X"/>
+										<input type="number" tcg="target-y" value="<?= "{$Modifier["Target"]["Y"]}"; ?>" placeholder="Y"/>
+									</div>
 								</div>
 							</div>
 							<div class="col s6">
 								<div>
 									<i class="material-icons">perm_identity</i>
-									<span><?= "{$Modifier["Target"]["Label"]} [{$Modifier["Target"]["Short"]}]"; ?></span>
+									
+									<a class="dropdown-trigger btn black-text <?= $Modifier["Target"]["IsFriendly"] ? "green lighten-2" : "red lighten-2"; ?>" href="#" data-target="ul-modifier-stat-target-<?= $i; ?>"><?= "{$Modifier["Target"]["Label"]} [{$Modifier["Target"]["Short"]}]"; ?></a>
+									<ul id="ul-modifier-stat-target-<?= $i; ?>" tcg="Target" class="dropdown-content ul-modifier" csm-id="<?= $Modifier["CardStatModifierID"];?>">
+										<li pkid="NULL">-- NULL --</li>
+										<li class="divider" tabindex="-1"></li>
+										<?php foreach($Targets as $Target): ?>
+											<li pkid="<?= $Target["TargetID"]; ?>"><?= "{$Target["Label"]} [{$Target["Short"]}]"; ?></li>
+										<?php endforeach; ?>
+									</ul>
 								</div>
 							</div>
 						</div>
@@ -251,19 +276,28 @@
 							<div class="col s4">
 								<div>
 									<i class="material-icons">update</i>
-									<span><?= $Modifier["Values"]["Lifespan"] === -1 ? "<i class='material-icons'>all_inclusive</i>" : $Modifier["Values"]["Lifespan"]; ?></span>
+									<div class="flex">
+										<input type="number" tcg="target-lifespan" min="-1" value="<?= "{$Modifier["Values"]["Lifespan"]}"; ?>" placeholder="Stage"/>
+									</div>
 								</div>
 							</div>
 							<div class="col s4">
 								<div>
 									<i class="material-icons">exposure</i>
-									<span><?= $Modifier["Values"]["Number"] === 0 ? ($Modifier["Values"]["Bonus"] >= 0 ? "+{$Modifier["Values"]["Bonus"]}" : "{$Modifier["Values"]["Bonus"]}") : "{$Modifier["Values"]["Number"]}d{$Modifier["Values"]["Sided"]}+{$Modifier["Values"]["Bonus"]}"; ?></span>
+									<div class="flex">
+										<input type="number" tcg="target-number" value="<?= "{$Modifier["Values"]["Number"]}"; ?>" placeholder="Number"/>
+										<input type="number" tcg="target-sided" value="<?= "{$Modifier["Values"]["Sided"]}"; ?>" placeholder="Sided"/>
+										<input type="number" tcg="target-bonus" value="<?= "{$Modifier["Values"]["Bonus"]}"; ?>" placeholder="Bonus"/>
+									</div>
 								</div>
 							</div>
 							<div class="col s4">
 								<div>
 									<i class="material-icons">format_list_numbered</i>
-									<span><?= "{$Modifier["Values"]["Stage"]}.{$Modifier["Values"]["Step"]}"; ?></span>
+									<div class="flex">
+										<input type="number" tcg="target-stage" value="<?= "{$Modifier["Values"]["Stage"]}"; ?>" placeholder="Stage"/>
+										<input type="number" tcg="target-step" value="<?= "{$Modifier["Values"]["Step"]}"; ?>" placeholder="Step"/>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -277,6 +311,15 @@
 <script>
 	$(document).ready(function() {
   		$(".dropdown-trigger").dropdown();
+
+		$("[tcg=card-name] > input[type=text]").on("change", function(e) {
+			AJAX("UpdateName", {
+				CardID: $("ul[tcg=card-id]").attr("card-id"),
+				Name: $(this).val()
+			}, (e) => {
+				location.reload();
+			});
+		});
 
 		$(".ul-category > li").on("click", function(e) {
 			AJAX("UpdateTask", {
@@ -296,13 +339,15 @@
 				location.reload();
 			});
 		});
-
-		$("[tcg=card-name] > input[type=text]").on("change", function(e) {
-			AJAX("UpdateName", {
-				CardID: $("ul[tcg=card-id]").attr("card-id"),
-				Name: $(this).val()
+		
+		$(".ul-modifier > li").on("click", function(e) {
+			AJAX("UpdateModifier", {
+				CardStatModifierID: $(this).parent().attr("csm-id"),
+				Table: $(this).parent().attr("tcg"),
+				PKID: $(this).attr("pkid")
 			}, (e) => {
-				location.reload();
+				// location.reload();
+				console.log(e);
 			});
 		});
 	});

@@ -12,6 +12,8 @@
 			Display::UpdateTask($Payload);
 		} else if($_GET["Action"] === "UpdateStat") {
 			Display::UpdateStat($Payload);
+		} else if($_GET["Action"] === "UpdateModifier") {
+			Display::UpdateModifier($Payload);
 		}
 	}
 
@@ -75,8 +77,27 @@ SQL;
 				cs.CardID = {$Payload->CardID}
 				AND s.Short = '{$Payload->Key}'
 SQL;
-			// echo $SQL;
 			if(isset($Payload->CardID) && isset($Payload->Key) && isset($Payload->Value)) {
+				$result = API::query($SQL);
+
+				echo json_encode($result);
+			}
+		}
+
+		public static function UpdateModifier($Payload) {
+			$SQL = <<<SQL
+			UPDATE TCG.CardStatModifier
+			SET
+				{$Payload->Table}ID = {$Payload->PKID},
+				ModifiedDateTime = GETDATE()
+			OUTPUT
+				Inserted.CardStatModifierID,
+				Inserted.{$Payload->Table}ID
+			WHERE
+				CardStatModifierID = {$Payload->CardStatModifierID}
+SQL;
+			echo $SQL;
+			if(isset($Payload->CardStatModifierID) && isset($Payload->Table) && isset($Payload->PKID)) {
 				$result = API::query($SQL);
 
 				echo json_encode($result);
