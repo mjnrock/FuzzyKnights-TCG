@@ -41,8 +41,8 @@
 					<div>
 						<i class="material-icons">location_on</i>
 						<div tcg="Target" csm-id="<?= $Modifier["CardStatModifierID"];?>" class="flex">
-							<input readonly type="number" tcg="X" value="<?= "{$Modifier["Target"]["X"]}"; ?>" placeholder="X"/>
-							<input readonly type="number" tcg="Y" value="<?= "{$Modifier["Target"]["Y"]}"; ?>" placeholder="Y"/>
+							<input readonly type="number" min="-2" max="2" tcg="X" value="<?= "{$Modifier["Target"]["X"]}"; ?>" placeholder="X"/>
+							<input readonly type="number" min="0" max="1" tcg="Y" value="<?= "{$Modifier["Target"]["Y"]}"; ?>" placeholder="Y"/>
 						</div>
 					</div>
 				</div>
@@ -72,9 +72,9 @@
 					<div>
 						<i class="material-icons">exposure</i>
 						<div class="flex">
-							<input type="number" tcg="Number" value="<?= "{$Modifier["Values"]["Number"]}"; ?>" placeholder="Number" />
-							<input type="number" tcg="Sided" value="<?= "{$Modifier["Values"]["Sided"]}"; ?>" placeholder="Sided" />
-							<input type="number" tcg="Bonus" value="<?= "{$Modifier["Values"]["Bonus"]}"; ?>" placeholder="Bonus" />
+							<input type="number" min="0" tcg="Number" value="<?= "{$Modifier["Values"]["Number"]}"; ?>" placeholder="Number" />
+							<input type="number" min="0" tcg="Sided" value="<?= "{$Modifier["Values"]["Sided"]}"; ?>" placeholder="Sided" />
+							<input type="number" min="0" tcg="Bonus" value="<?= "{$Modifier["Values"]["Bonus"]}"; ?>" placeholder="Bonus" />
 						</div>
 					</div>
 				</div>
@@ -82,8 +82,8 @@
 					<div>
 						<i class="material-icons">format_list_numbered</i>
 						<div class="flex">
-							<input type="number" tcg="Stage" value="<?= "{$Modifier["Values"]["Stage"]}"; ?>" placeholder="Stage"/>
-							<input type="number" tcg="Step" value="<?= "{$Modifier["Values"]["Step"]}"; ?>" placeholder="Step"/>
+							<input type="number" min="1" tcg="Stage" value="<?= "{$Modifier["Values"]["Stage"]}"; ?>" placeholder="Stage"/>
+							<input type="number" min="1" tcg="Step" value="<?= "{$Modifier["Values"]["Step"]}"; ?>" placeholder="Step"/>
 						</div>
 					</div>
 				</div>
@@ -131,6 +131,8 @@
 						$(`li[csm-id=${+response.CardStatModifierID}] a[action=DeActivate]`)
 							.html(text)
 							.attr("class", `w-80 waves-effect waves-dark btn b ba ${css}`);
+
+						LoadCells();
 					}
 				});
 			} else if($(this).attr("action") === "Delete") {
@@ -202,6 +204,8 @@
 						e,
 						true
 					);
+					
+					LoadCells();
 				} else {
 					AjaxFade(
 						$(this),
