@@ -773,3 +773,30 @@ BEGIN
 		@Card;
 END
 GO
+
+CREATE PROCEDURE TCG.DeleteCard
+	@CardID INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+    DELETE FROM TCG.CardStatModifier
+	WHERE
+		CardID = @CardID;
+		
+    DELETE FROM TCG.CardStat
+	WHERE
+		CardID = @CardID;
+		
+    DELETE FROM TCG.CardCategorization
+	WHERE
+		CardID = @CardID;
+
+    DELETE FROM TCG.[Card]
+	WHERE
+		CardID = @CardID;
+
+	SELECT
+		@CardID AS CardID;
+END
+GO

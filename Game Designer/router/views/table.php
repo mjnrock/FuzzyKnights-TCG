@@ -12,6 +12,10 @@
 	}
 ?>
 
+<div class="flex mr2 ml2 mt3">
+	<div class="w-100 waves-effect waves-dark btn green b ba green-text text-darken-4" action="Add"><i class="material-icons">add</i></div>
+</div>
+
 <table class="table centered">
 	<thead>
 		<th>Name</th>
@@ -71,8 +75,18 @@
 			window.location.href = `/card/${$(this).attr("card-id")}`;
 		});
 
-		$("td.table-actions div.btn").on("click", function() {
-			if($(this).attr("action") === "Edit") {
+		$("div[action]").on("click", function() {
+			if($(this).attr("action") === "Add") {
+				AJAX("CardUpdateState", {
+					Action: "Add"
+				}, (e) => {
+					if(e !== null && e !== void 0) {
+						let response = JSON.parse(e)[0];
+						
+						location.href = `/card/${response.CardID}`;
+					}
+				});
+			} else if($(this).attr("action") === "Edit") {
 				location.href = `/card/${$(this).parents("tr[card-id]").attr("card-id")}`;
 			} else if($(this).attr("action") === "DeActivate") {
 				AJAX("CardUpdateState", {
@@ -82,27 +96,23 @@
 					if(e !== null && e !== void 0) {
 						let response = JSON.parse(e)[0];
 
-						// console.log(response);
 						$(this).attr("class", `btn mr1 white ba ${+response.IsActive === 1 ? "green lighten-3 green-text text-darken-2" : "grey lighten-3 grey-text text-darken-2"}`);
-						$(this).find("i").text("edit");
-
-						// 	text = null,
-						// 	css = null;
-
-						// if(+response.ModifierIsActive === 1) {
-						// 	text = "<i class='material-icons'>visibility_on</i>";
-						// 	css = "green lighten-3 green-text text-darken-2";
-						// } else {
-						// 	text = "<i class='material-icons'>visibility_off</i>";
-						// 	css = "grey lighten-3 grey-text text-darken-2";
-						// }
-						// $(`li[csm-id=${+response.CardStatModifierID}] a[action=DeActivate]`)
-						// 	.html(text)
-						// 	.attr("class", `w-80 waves-effect waves-dark btn b ba ${css}`);
+						$(this).find("i").text(+response.IsActive === 1 ? "visibility_on" : "visibility_off");
 					}
 				});
 			} else if($(this).attr("action") === "Delete") {
+				if(confirm("Are you sure?")) {
+					AJAX("CardUpdateState", {
+						CardID: $(this).parents("tr[card-id]").attr("card-id"),
+						Action: "Delete"
+					}, (e) => {
+						if(e !== null && e !== void 0) {
+							let response = JSON.parse(e)[0];
 
+							$(`tr[card-id=${response.CardID}]`).remove();
+						}
+					});
+				}
 			}
 		});
 	});

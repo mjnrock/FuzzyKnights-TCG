@@ -2,7 +2,6 @@
 	require_once "{$_SERVER["DOCUMENT_ROOT"]}/libs/index.php";
 	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/index.php";
 
-	// print_r($_GET);
 	if(isset($_GET["Action"]) && isset($_GET["Payload"])) {
 		$Payload = json_decode($_GET["Payload"]);
 
@@ -207,17 +206,18 @@ SQL;
 SQL;
 					} else if($Payload->Action === "Delete") {
 						$SQL = <<<SQL
-						DELETE FROM TCG.Card
-						OUTPUT
-							Deleted.CardID
-						WHERE
-							CardID = {$Payload->CardID};
+						EXEC TCG.DeleteCard {$Payload->CardID};
+SQL;
+					}
+				} else {
+					if($Payload->Action === "Add") {						
+						$SQL = <<<SQL
+						EXEC TCG.QuickCreateCard
 SQL;
 					}
 				}
 				
 				$result = API::query($SQL);
-				
 				echo json_encode($result);
 			}
 		}
