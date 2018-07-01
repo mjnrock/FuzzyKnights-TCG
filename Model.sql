@@ -202,6 +202,29 @@ CREATE TABLE TCG.CardStatModifier (
 	DeactivatedDateTime DATETIME2(3) NULL
 );
 
+CREATE TABLE TCG.Deck (
+	DeckID INT IDENTITY(1,1) PRIMARY KEY,
+
+	Name VARCHAR(255) NOT NULL,
+	[Description] VARCHAR(MAX) NULL,
+	
+	CreatedDateTime DATETIME2(3) NOT NULL DEFAULT SYSDATETIME(),
+	ModifiedDateTime DATETIME2(3) NOT NULL DEFAULT SYSDATETIME(),
+	DeactivatedDateTime DATETIME2(3) NULL
+);
+
+CREATE TABLE TCG.DeckCard (
+	DeckCardID INT IDENTITY(1,1) PRIMARY KEY,
+	
+	DeckID INT NOT NULL FOREIGN KEY REFERENCES TCG.Deck (DeckID),
+	CardID INT NOT NULL FOREIGN KEY REFERENCES TCG.[Card] (CardID),
+	Quantity INT NOT NULL DEFAULT 1,
+	Ordinality INT NULL,	-- In case you want to allow for a Deck to be played in a particular order
+	
+	CreatedDateTime DATETIME2(3) NOT NULL DEFAULT SYSDATETIME(),
+	ModifiedDateTime DATETIME2(3) NOT NULL DEFAULT SYSDATETIME(),
+	DeactivatedDateTime DATETIME2(3) NULL
+);
 
 
 
@@ -732,7 +755,7 @@ BEGIN
 	OUTPUT
 		Inserted.CardID INTO @Card (CardID)
 	VALUES
-		(CAST(NEWID() AS VARCHAR(255)), GETDATE());
+		(CAST(NEWID() AS VARCHAR(255)), SYSDATETIME());
 
 	DECLARE @CardID INT = (SELECT CardID FROM @Card);
 

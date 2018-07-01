@@ -12,8 +12,12 @@
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.19/js/jquery.dataTables.min.js"></script> -->
 
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.30.6/js/jquery.tablesorter.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.30.6/js/jquery.tablesorter.widgets.min.js"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.30.6/js/widgets/widget-filter.min.js"></script> -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.30.6/js/extras/jquery.tablesorter.pager.min.js"></script>
 		<!-- <script src="/assets/js/jquery.min.js"></script>
 		<script src="/assets/js/materialize.min.js"></script>
 		<script src="/assets/js/jquery.dataTables.min.js"></script> -->
