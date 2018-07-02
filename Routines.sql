@@ -81,15 +81,15 @@ SELECT
 	cs.*
 FROM
 	TCG.[Card] c WITH (NOLOCK)
-	INNER JOIN TCG.CardStatModifier csm WITH (NOLOCK)
+	LEFT JOIN TCG.CardStatModifier csm WITH (NOLOCK)
 		ON c.CardID = csm.CardID
-	INNER JOIN TCG.Stat s WITH (NOLOCK)
+	LEFT JOIN TCG.Stat s WITH (NOLOCK)
 		ON csm.StatID = s.StatID
-	INNER JOIN TCG.StatAction sa WITH (NOLOCK)
+	LEFT JOIN TCG.StatAction sa WITH (NOLOCK)
 		ON csm.StatActionID = sa.StatActionID
-	INNER JOIN TCG.[Target] t WITH (NOLOCK)
+	LEFT JOIN TCG.[Target] t WITH (NOLOCK)
 		ON csm.TargetID = t.TargetID
-	INNER JOIN (
+	LEFT JOIN (
 		SELECT
 			cc.CardID AS CardCategorizationCardID,
 			t.TaskID,
@@ -224,6 +224,18 @@ FROM (
 
 		SELECT
 			csm.*,
+			'Persistent, Non-Self Modifier' AS AnomalyMessage
+		FROM
+			TCG.vwCardStatModifier csm WITH (NOLOCK)
+		WHERE
+			csm.TaskShort = 'E'
+			AND csm.TargetShort != 'S'
+			AND csm.Lifespan = -1
+
+		UNION ALL
+
+		SELECT
+			csm.*,
 			'Equipment, No Requirement' AS AnomalyMessage
 		FROM
 			TCG.vwCardStatModifier csm WITH (NOLOCK)
@@ -241,6 +253,17 @@ FROM (
 		WHERE
 			csm.TaskShort = 'A'
 			AND csm.RequirementCardTypeID IS NULL
+
+		UNION ALL
+
+		SELECT
+			csm.*,
+			'Entity, Strange Type' AS AnomalyMessage
+		FROM
+			TCG.vwCardStatModifier csm	 WITH (NOLOCK)
+		WHERE
+			csm.TaskShort = 'E'
+			AND csm.CardTypeShort NOT IN ('CMP', 'HRO')
 
 		UNION ALL
 
@@ -314,15 +337,15 @@ RETURN
 		cs.*
 	FROM
 		TCG.[Card] c WITH (NOLOCK)
-		INNER JOIN TCG.CardStatModifier csm WITH (NOLOCK)
+		LEFT JOIN TCG.CardStatModifier csm WITH (NOLOCK)
 			ON c.CardID = csm.CardID
-		INNER JOIN TCG.Stat s WITH (NOLOCK)
+		LEFT JOIN TCG.Stat s WITH (NOLOCK)
 			ON csm.StatID = s.StatID
-		INNER JOIN TCG.StatAction sa WITH (NOLOCK)
+		LEFT JOIN TCG.StatAction sa WITH (NOLOCK)
 			ON csm.StatActionID = sa.StatActionID
-		INNER JOIN TCG.[Target] t WITH (NOLOCK)
+		LEFT JOIN TCG.[Target] t WITH (NOLOCK)
 			ON csm.TargetID = t.TargetID
-		INNER JOIN (
+		LEFT JOIN (
 			SELECT
 				cc.CardID AS CardCategorizationCardID,
 				t.TaskID,

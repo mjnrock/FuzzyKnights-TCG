@@ -16,7 +16,7 @@
 		}
 	});
 	Router::Get("/deck/s/:DeckID", function($Request) {
-		$Deck = API::vwDeck();
+		$Deck = API::vwDeck(NULL, "DeckID = {$Request->Variables["DeckID"]}", NULL, "Name");
 		
 		if(sizeof($Deck) > 0) {
 			require_once "{$_SERVER["DOCUMENT_ROOT"]}/routes/Deck/deck.php";

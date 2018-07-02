@@ -9,19 +9,21 @@
 
 	if(!function_exists("ModCell")) {
 		function ModCell($X, $Y, $Mod, $ColorLookup) {
-			if($Mod["Target"]["X"] === $X && $Mod["Target"]["Y"] === $Y) {
-				$Range = [
-					"Min" => $Mod["Values"]["Number"] + $Mod["Values"]["Bonus"],
-					"Max" => $Mod["Values"]["Number"] * $Mod["Values"]["Sided"] + $Mod["Values"]["Bonus"],
-				];
-				$Range["Display"] = $Range["Min"] === $Range["Max"] ? "<strong>[{$Range["Max"]}]</strong>" : "[{$Range['Min']}-{$Range['Max']}]";
+			if(isset($Mod["Stat"]["Short"])) {
+				if($Mod["Target"]["X"] === $X && $Mod["Target"]["Y"] === $Y) {
+					$Range = [
+						"Min" => $Mod["Values"]["Number"] + $Mod["Values"]["Bonus"],
+						"Max" => $Mod["Values"]["Number"] * $Mod["Values"]["Sided"] + $Mod["Values"]["Bonus"],
+					];
+					$Range["Display"] = $Range["Min"] === $Range["Max"] ? "<strong>[{$Range["Max"]}]</strong>" : "[{$Range['Min']}-{$Range['Max']}]";
 
-				echo "<div class='flex w-100 pt1 pb1 code f6 black-text'>
-					<div class='w-25 b {$ColorLookup["StatAction"]["Foreground"][$Mod["Stat"]["Action"]["Short"]]}'>" . substr($Mod['Stat']['Action']['Label'], 0, 4) . "</div>
-					<div class='w-25 b {$ColorLookup["Stat"][$Mod["Stat"]["Short"]]}'>{$Mod['Stat']['Short']}</div>
-					<div class='w-40'>{$Range["Display"]}</div>
-					<div class='w-20'>" . ($Mod['Values']['Lifespan'] === -1 ? '&#x221e;' : $Mod['Values']['Lifespan']) . "</div>
-				</div>";
+					echo "<div class='flex w-100 pt1 pb1 code f6 black-text'>"
+						."<div class='w-25 b {$ColorLookup["StatAction"]["Foreground"][$Mod["Stat"]["Action"]["Short"]]}'>" . substr($Mod['Stat']['Action']['Label'], 0, 4) . "</div>"
+						."<div class='w-25 b {$ColorLookup["Stat"][$Mod["Stat"]["Short"]]}'>{$Mod['Stat']['Short']}</div>"
+						."<div class='w-40'>{$Range["Display"]}</div>"
+						."<div class='w-20'>" . ($Mod['Values']['Lifespan'] === -1 ? '&#x221e;' : $Mod['Values']['Lifespan']) . "</div>"
+					."</div>";
+				}
 			}
 		}
 	}

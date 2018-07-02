@@ -1,0 +1,13 @@
+BUGS
+------------------------------------------------
+
+
+ADDITIONS
+------------------------------------------------
+[] Like Requirements, add Exclusions
+[] Allow having more than one (1) Requirements
+
+
+BUGS - FIXED
+------------------------------------------------
+[X] Deck component doesn't load the proper Deck

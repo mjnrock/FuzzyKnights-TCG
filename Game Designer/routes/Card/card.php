@@ -14,7 +14,7 @@
 ?>
 
 <script>
-	const ColorLookup = <?= json_encode($Card->ColorLookup); ?>;
+	const ColorLookup = <?= json_encode(\Card\Card::$ColorLookup); ?>;
 	
 	function AjaxFade(animate, e, isSuccess = false) {
 		animate.fadeIn(200, "linear", () => {
