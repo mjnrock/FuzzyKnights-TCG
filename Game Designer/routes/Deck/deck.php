@@ -10,5 +10,5 @@
 	// $Stats = API::Stat(NULL, NULL, NULL, "Label");
 	// $StatActions = API::StatAction(NULL, NULL, NULL, "Label");
 
-	require_once "{$_SERVER["DOCUMENT_ROOT"]}/components/atomic/Deck/deck.php";
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/components/Deck/deck.php";
 ?>

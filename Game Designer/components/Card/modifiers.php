@@ -1,7 +1,7 @@
 <h6 tcg="card-name" class="tc">Modifiers</h6>
 			
 <div class="cell-injection">
-	<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/atomic/Card/modifiers-cells.php"; ?>
+	<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/Card/modifiers-cells.php"; ?>
 </div>
 
 <div class="flex mr2 ml2 mt3">
@@ -100,7 +100,7 @@
 	$(document).ready(function() {
 		function LoadCells() {
 			$(".cell-injection").empty();
-			$(".cell-injection").load("/components/atomic/Card/modifiers-cells.php?CardID=<?= $Card->ID; ?>");
+			$(".cell-injection").load("/components/Card/modifiers-cells.php?CardID=<?= $Card->ID; ?>");
 		}
 
 		$("a[action]").on("click", function(e) {

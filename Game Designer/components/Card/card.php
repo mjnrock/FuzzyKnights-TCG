@@ -27,13 +27,13 @@
 			<img tcg="card-picture" src="<?= $Card->Picture; ?>" alt="">
 		</li>
 		<li>
-			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/atomic/card/categories.php"; ?>
+			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/Card/categories.php"; ?>
 		</li>
 		<li>
-			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/atomic/card/stats.php"; ?>
+			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/Card/stats.php"; ?>
 		</li>
 		<li>
-			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/atomic/card/modifiers.php"; ?>
+			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/Card/modifiers.php"; ?>
 		</li>
 	</ul>
 </div>
