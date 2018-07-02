@@ -35,32 +35,3 @@
 		</tr>
 	</tbody>
 </table>
-
-<script>
-	$(document).ready(function() {
-		$("[tcg=card-stat] > input[type=number]").on("blur", function(e) {
-			AJAX("Card", "UpdateStat", {
-				CardID: $("ul[tcg=card-id]").attr("card-id"),
-				Key: $(this).parent().attr("code"),
-				Value: $(this).val()
-			}, (e) => {
-				if(e !== null && e !== void 0) {
-					let response = JSON.parse(e)[0];
-					$(this).val(+response.Value);
-
-					AjaxFade(
-						$(this),
-						e,
-						true
-					);
-				} else {
-					AjaxFade(
-						$(this),
-						e,
-						false
-					);
-				}
-			});
-		});
-	});
-</script>

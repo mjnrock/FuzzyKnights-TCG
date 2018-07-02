@@ -17,6 +17,8 @@
 			UpdateModifierState($Payload);
 		} else if($_GET["Action"] === "UpdateState") {
 			UpdateState($Payload);
+		} else if($_GET["Action"] === "UpdateQuantity") {
+			UpdateQuantity($Payload);
 		}
 	}
 
@@ -214,6 +216,43 @@ SQL;
 			}
 			
 			$result = API::query($SQL);
+			echo json_encode($result);
+		}
+	}
+
+	//	TODO Make this a MERGE
+	function UpdateQuantity($Payload) {
+		if(isset($Payload->DeckID) && isset($Payload->CardID) && isset($Payload->Quantity)) {
+			$SQL = <<<SQL
+			MERGE INTO TCG.DeckCard t
+			USING (
+				SELECT
+					{$Payload->DeckID} AS DeckID,
+					{$Payload->CardID} AS CardID,
+					{$Payload->Quantity} AS Quantity
+			) s
+				ON t.DeckID = s.DeckID
+				AND t.CardID = s.CardID
+			WHEN MATCHED AND s.Quantity = 0 THEN
+				DELETE
+			WHEN MATCHED THEN
+				UPDATE
+				SET
+					t.Quantity = s.Quantity
+			WHEN NOT MATCHED THEN
+				INSERT (DeckID, CardID, Quantity)
+				VALUES (
+					s.DeckID,
+					s.CardID,
+					s.Quantity
+				)
+			OUTPUT
+				Inserted.DeckID,
+				Inserted.CardID,
+				Inserted.Quantity;
+SQL;
+			$result = API::query($SQL);
+
 			echo json_encode($result);
 		}
 	}

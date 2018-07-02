@@ -1,18 +1,13 @@
 <?php
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card/Card.php";
 	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Deck/Deck.php";
 	
-	$Deck = new \Deck\Deck($Deck);
-?>
-
-<script>	
-	function AjaxFade(animate, e, isSuccess = false) {
-		animate.fadeIn(200, "linear", () => {
-			animate.addClass(`${!!isSuccess ? "green" : "red"} lighten-4`);
-		}).fadeOut(300, "linear", () => {
-			animate.removeClass(`${!!isSuccess ? "green" : "red"} lighten-4`);
-		}).fadeIn(50);
+	if($Deck instanceof \Deck\Deck) {
+		//	NOOP
+	} else {
+		$Deck = new \Deck\Deck($Deck);
 	}
-</script>
+?>
 
 <div class="row ba b--black-20 br2 shadow-5">
 	<ul tcg="deck-id" deck-id="<?= $Deck->ID; ?>">
@@ -33,7 +28,7 @@
 					<div class="card-title tc pa1">
 						Unique
 					</div>
-					<div class="card-action tc">
+					<div class="card-action tc" tcg="UniqueCardCount">
 						<?= $Deck->UniqueCardCount; ?>
 					</div>
 				</div>
@@ -42,38 +37,22 @@
 					<div class="card-title tc pa1">
 						Total
 					</div>
-					<div class="card-action tc">
+					<div class="card-action tc" tcg="TotalCardCount">
 						<?= $Deck->TotalCardCount; ?>
 					</div>
 				</div>
 			</div>
 		</li>
+
+		<li>
+			<?php
+				$Cards = \API::$DB->TVF("GetDeckCards", [$Deck->ID], NULL, "TCG");
+				$Cards = \Card\Card::InstantiateCards($Cards);
+				$AllCards = \Card\Card::InstantiateCards();
+
+				$AllowEdit = FALSE;
+				require "{$_SERVER["DOCUMENT_ROOT"]}/components/Card/DeckTable.php";
+			?>
+		</li>
 	</ul>
 </div>
-
-<script>
-	$(document).ready(function() {
-  		$(".dropdown-trigger").dropdown();		
-
-		$("[tcg=deck-name] > input[type=text]").on("change", function(e) {
-			AJAX("UpdateName", {
-				DeckID: $("ul[tcg=deck-id]").attr("deck-id"),
-				Name: $(this).val()
-			}, (e) => {
-				if(e !== null && e !== void 0) {
-					AjaxFade(
-						$(this),
-						e,
-						true
-					);
-				} else {
-					AjaxFade(
-						$(this),
-						e,
-						false
-					);
-				}
-			});
-		});
-	});
-</script>

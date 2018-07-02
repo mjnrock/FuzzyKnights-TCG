@@ -24,6 +24,24 @@
 
 				return $this;
 			}
+
+			public static function InstantiateDecks($temps = null) {
+				if(!isset($temps)) {
+					$temps = \API::vwDeck();
+				}
+				$Decks = [];
+				foreach($temps as $temp) {
+					if(!isset($Decks[$temp["Name"]])) {
+						$Decks[$temp["Name"]] = [];
+					}
+					$Decks[$temp["Name"]][] =  $temp;
+				}
+				foreach($Decks as $i => $Deck) {
+					$Decks[$i] = new \Deck\Deck($Deck);
+				}
+	
+				return $Decks;
+			}
 		}
 	}
 ?>

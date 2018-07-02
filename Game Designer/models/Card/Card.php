@@ -4,6 +4,8 @@
 		require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card/Stats.php";
 		
 		class Card {
+			public $Quantity;
+
 			public $ID;
 			public $Name;
 			public $Picture;
@@ -66,6 +68,8 @@
 			}
 
 			public function SetCard($Card) {			
+				$this->Quantity = isset($Card[0]["Quantity"]) ? (int)$Card[0]["Quantity"] : null;
+
 				$this->ID = (int)$Card[0]["CardID"];
 				$this->Name = $Card[0]["Name"];
 				$this->Picture = $Card[0]["Picture"];
@@ -107,6 +111,24 @@
 				}
 
 				return $this;
+			}
+
+			public static function InstantiateCards($temps = null) {
+				if(!isset($temps)) {
+					$temps = \API::vwCardStatModifier(NULL, NULL, NULL, "Name, Stage, Step");
+				}
+				$Cards = [];
+				foreach($temps as $temp) {
+					if(!isset($Cards[$temp["Name"]])) {
+						$Cards[$temp["Name"]] = [];
+					}
+					$Cards[$temp["Name"]][] =  $temp;
+				}
+				foreach($Cards as $i => $Card) {
+					$Cards[$i] = new \Card\Card($Card);
+				}
+
+				return $Cards;
 			}
 		}
 	}

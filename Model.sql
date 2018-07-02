@@ -757,6 +757,64 @@ RETURN
 )
 GO
 
+CREATE FUNCTION TCG.GetDeck
+(	
+	@DeckID INT
+)
+RETURNS TABLE 
+AS
+RETURN 
+(
+	SELECT
+		d.DeckID,
+		d.Name,
+		d.[Description],
+		CASE
+			WHEN d.DeactivatedDateTime IS NULL THEN 1
+			ELSE 0
+		END AS IsActive,
+
+		dcm.UniqueCardCount,
+		dcm.TotalCardCount
+	FROM
+		TCG.Deck d WITH (NOLOCK)
+		LEFT JOIN TCG.DeckCard dc WITH (NOLOCK)
+			ON d.DeckID = dc.DeckID
+		LEFT JOIN (
+			SELECT
+				dc2.DeckID,
+				COUNT(DISTINCT dc2.CardID) AS UniqueCardCount,
+				SUM(Quantity) AS TotalCardCount
+			FROM
+				TCG.DeckCard dc2 WITH (NOLOCK)
+			GROUP BY
+				dc2.DeckID
+		) dcm
+			ON d.DeckID = dcm.DeckID
+	WHERE
+		d.DeckID = @DeckID
+)
+GO
+
+CREATE FUNCTION TCG.GetDeckCards
+(	
+	@DeckID INT
+)
+RETURNS TABLE 
+AS
+RETURN 
+(
+	SELECT
+		dc.Quantity,
+		ca.*
+	FROM
+		TCG.DeckCard dc WITH (NOLOCK)
+		CROSS APPLY TCG.GetCard(dc.CardID) ca
+	WHERE
+		dc.DeckID = @DeckID
+)
+GO
+
 
 
 CREATE PROCEDURE TCG.QuickCreateCard
