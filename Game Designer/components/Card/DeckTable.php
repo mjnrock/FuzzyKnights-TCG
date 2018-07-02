@@ -10,19 +10,19 @@
 		<th>ID</th>
 		<th>Name</th>
 
-		<th>Type</th>
-		<th>Discipline</th>
+		<th class="filter-select filter-exact">Type</th>
+		<th class="filter-select filter-exact">Discipline</th>
 
-		<th>Task</th>
-		<th>Requirement</th>
+		<th class="filter-select filter-exact">Task</th>
+		<th class="filter-select filter-exact">Requirement</th>
 
-		<th>STR</th>
-		<th>TGH</th>
-		<th>PWR</th>
-		<th>RES</th>
-		<th>HP</th>
-		<th>MP</th>
-		<th>DUR</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["STR"]; ?>">STR</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["TGH"]; ?>">TGH</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["PWR"]; ?>">PWR</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["RES"]; ?>">RES</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["HP"]; ?>">HP</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["MP"]; ?>">MP</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["DUR"]; ?>">DUR</th>
 	</thead>
 	<tbody>
 		<?php
@@ -39,8 +39,8 @@
 			$AllCards = $d;
 		?>
 		<?php foreach($AllCards as $key => $Card): ?>
-			<tr class="pointer hide" card-id="<?= $Card->ID; ?>">
-				<td><input type="number" value="<?= $Card->Quantity; ?>" min="0" deck-id="<?= $Deck->ID; ?>" card-id="<?= $Card->ID; ?>" /></td>
+			<tr class="pointer" card-id="<?= $Card->ID; ?>">
+				<td><input type="number" value="<?= isset($Card->Quantity) ? $Card->Quantity : 0; ?>" min="0" deck-id="<?= $Deck->ID; ?>" card-id="<?= $Card->ID; ?>" /></td>
 
 				<td><?= $Card->ID; ?></td>
 				<td><?= $Card->Name; ?></td>
@@ -58,7 +58,7 @@
 				<td requirement-id="<?= $Card->Categories->RequirementCardType["ID"]; ?>">
 					<?= $Card->Categories->RequirementCardType["Label"]; ?>
 				</td>
-				
+								
 				<td><?= $Card->Stats->Strength; ?></td>
 				<td><?= $Card->Stats->Toughness; ?></td>
 				<td><?= $Card->Stats->Power; ?></td>
@@ -90,13 +90,13 @@
 					<?= $Card->Categories->RequirementCardType["Label"]; ?>
 				</td>
 				
-				<td><?= $Card->Stats->Strength; ?></td>
-				<td><?= $Card->Stats->Toughness; ?></td>
-				<td><?= $Card->Stats->Power; ?></td>
-				<td><?= $Card->Stats->Resistance; ?></td>
-				<td><?= $Card->Stats->Health; ?></td>
-				<td><?= $Card->Stats->Mana; ?></td>
-				<td><?= $Card->Stats->Durability; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["STR"]; ?>"><?= $Card->Stats->Strength; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["TGH"]; ?>"><?= $Card->Stats->Toughness; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["PWR"]; ?>"><?= $Card->Stats->Power; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["RES"]; ?>"><?= $Card->Stats->Resistance; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["HP"]; ?>"><?= $Card->Stats->Health; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["MP"]; ?>"><?= $Card->Stats->Mana; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["DUR"]; ?>"><?= $Card->Stats->Durability; ?></td>
 			</tr>
 		<?php endforeach; ?>
 	</tbody>
@@ -127,7 +127,8 @@
 		fixedWidth: true,
 		widgets: ["filter"],
 		widgetOptions : {
-			filter_reset: ".reset"
+			filter_reset: ".reset",
+			filter_cssFilter: ["", "", "", "browser-default", "browser-default", "browser-default", "browser-default"]
 		}
 	}).tablesorterPager({
 		container: $(".ts-pager"),
@@ -174,7 +175,7 @@
 					let response = JSON.parse(e)[0];
 					$(this).val(+response.Quantity);
 
-					HideRows(false);
+					// HideRows(false);
 
 					AjaxFade(
 						$(this),
@@ -190,7 +191,6 @@
 				}
 			});
 		});
-
 		
 		$("div[action]").on("click", function() {
 			if($(this).attr("action") === "ToggleCards") {

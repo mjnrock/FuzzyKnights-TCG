@@ -32,6 +32,26 @@
 				}
 			});
 		});
+		$("[tcg=deck-description] > textarea").on("change", function(e) {
+			AJAX("Deck", "UpdateDescription", {
+				DeckID: $("ul[tcg=deck-id]").attr("deck-id"),
+				Description: $(this).val()
+			}, (e) => {
+				if(e !== null && e !== void 0) {
+					AjaxFade(
+						$(this),
+						e,
+						true
+					);
+				} else {
+					AjaxFade(
+						$(this),
+						e,
+						false
+					);
+				}
+			});
+		});
 		
 		$(".table-deck tbody > tr").on("dblclick", function () {
 			window.location.href = `/deck/s/${$(this).attr("deck-id")}`;

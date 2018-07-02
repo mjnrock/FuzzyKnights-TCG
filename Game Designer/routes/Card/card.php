@@ -33,7 +33,7 @@
   		$(".dropdown-trigger").dropdown();		
 
 		$("[tcg=card-name] > input[type=text]").on("change", function(e) {
-			AJAX("UpdateName", {
+			AJAX("Card", "UpdateName", {
 				CardID: $("ul[tcg=card-id]").attr("card-id"),
 				Name: $(this).val()
 			}, (e) => {

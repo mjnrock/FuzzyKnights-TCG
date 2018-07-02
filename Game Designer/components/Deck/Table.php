@@ -2,10 +2,12 @@
 	$AllowEdit = isset($AllowEdit) ? $AllowEdit : TRUE;
 ?>
 
-<div class="flex mr2 ml2 mt3">
-	<div class="w-100 waves-effect waves-dark btn btn-large green b ba green-text text-darken-4" action="Add"><i class="material-icons">add</i></div>
-</div>
-<br />
+<?php if($AllowEdit): ?>
+	<div class="flex mt3">
+		<div class="w-100 waves-effect waves-dark btn btn-large green lighten-1 br0 white-text" action="Add">Create Deck</div>
+	</div>
+	<br />
+<?php endif; ?>
 
 <table class="table centered table-deck">
 	<thead>

@@ -8,7 +8,7 @@
 	</thead>
 	<tbody>
 		<td tcg="card-category-task" task-id="<?= $Card->Categories->Task["ID"]; ?>">
-			<a tcg="Task" tcg-c="Task" pkid="<?= $Card->Categories->Task["ID"]; ?>" class="dropdown-trigger btn ba white <?= $Card->ColorLookup["Task"][$Card->Categories->Task["Short"]]; ?>" href="#" data-target="ul-tasks"><?= "{$Card->Categories->Task["Label"]} [{$Card->Categories->Task["Short"]}]"; ?></a>
+			<a tcg="Task" tcg-c="Task" pkid="<?= $Card->Categories->Task["ID"]; ?>" class="dropdown-trigger btn ba white <?= \Card\Card::$ColorLookup["Task"][$Card->Categories->Task["Short"]]; ?>" href="#" data-target="ul-tasks"><?= "{$Card->Categories->Task["Label"]} [{$Card->Categories->Task["Short"]}]"; ?></a>
 			<ul id="ul-tasks" tcg="Task" tcg-c="Task" class="dropdown-content ul-category">
 				<?php foreach($Tasks as $Task): ?>
 					<li pkid="<?= $Task["TaskID"]; ?>"><?= "{$Task["Label"]} [{$Task["Short"]}]"; ?></li>
@@ -26,7 +26,7 @@
 		</td>
 
 		<td tcg="card-category-discipline" task-id="<?= $Card->Categories->Discipline["ID"]; ?>">
-			<a tcg="Discipline" tcg-c="Discipline" pkid="<?= $Card->Categories->Discipline["ID"]; ?>" class="dropdown-trigger btn ba white <?= $Card->ColorLookup["Discipline"][$Card->Categories->Discipline["Short"]]; ?>" href="#" data-target="ul-disciplines"><?= "{$Card->Categories->Discipline["Label"]} [{$Card->Categories->Discipline["Short"]}]"; ?></a>
+			<a tcg="Discipline" tcg-c="Discipline" pkid="<?= $Card->Categories->Discipline["ID"]; ?>" class="dropdown-trigger btn ba white <?= \Card\Card::$ColorLookup["Discipline"][$Card->Categories->Discipline["Short"]]; ?>" href="#" data-target="ul-disciplines"><?= "{$Card->Categories->Discipline["Label"]} [{$Card->Categories->Discipline["Short"]}]"; ?></a>
 			<ul id="ul-disciplines" tcg="Discipline" tcg-c="Discipline" class="dropdown-content ul-category">
 				<?php foreach($Disciplines as $Discipline): ?>
 					<li pkid="<?= $Discipline["DisciplineID"]; ?>"><?= "{$Discipline["Label"]} [{$Discipline["Short"]}]"; ?></li>

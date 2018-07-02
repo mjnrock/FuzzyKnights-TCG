@@ -5,6 +5,7 @@
 
 	Router::QuickGet("/deck/table", "Deck/table");
 	Router::QuickGet("/card/table", "Card/table");
+	Router::QuickGet("/card/anomaly", "Card/anomaly");
 	Router::Get("/card/s/:CardID", function($Request) {
 		$Card = API::vwCardStatModifier(NULL, "CardID = {$Request->Variables["CardID"]}", NULL, "Name, Stage, Step");
 		

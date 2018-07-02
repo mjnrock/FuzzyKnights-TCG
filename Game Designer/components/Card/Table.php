@@ -1,30 +1,37 @@
 <?php
 	$AllowEdit = isset($AllowEdit) ? $AllowEdit : TRUE;
+	$ShowAnomalyMessage = isset($ShowAnomalyMessage) ? $ShowAnomalyMessage : FALSE;
 ?>
 
-<div class="flex mr2 ml2 mt3">
-	<div class="w-100 waves-effect waves-dark btn btn-large green b ba green-text text-darken-4" action="Add"><i class="material-icons">add</i></div>
-</div>
-<br />
+<?php if($AllowEdit): ?>
+	<div class="flex mt3">
+		<div class="w-100 waves-effect waves-dark btn btn-large green lighten-1 br0 white-text" action="Add">Create Card</div>
+	</div>
+	<br />
+<?php endif; ?>
 
 <table class="table centered table-card">
 	<thead>
 		<th>ID</th>
 		<th>Name</th>
 
-		<th>Type</th>
-		<th>Discipline</th>
+		<th class="filter-select filter-exact">Type</th>
+		<th class="filter-select filter-exact">Discipline</th>
 
-		<th>Task</th>
-		<th>Requirement</th>
+		<th class="filter-select filter-exact">Task</th>
+		<th class="filter-select filter-exact">Requirement</th>
 
-		<th>STR</th>
-		<th>TGH</th>
-		<th>PWR</th>
-		<th>RES</th>
-		<th>HP</th>
-		<th>MP</th>
-		<th>DUR</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["STR"]; ?>">STR</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["TGH"]; ?>">TGH</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["PWR"]; ?>">PWR</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["RES"]; ?>">RES</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["HP"]; ?>">HP</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["MP"]; ?>">MP</th>
+		<th class="<?= \Card\Card::$ColorLookup["Stat"]["DUR"]; ?>">DUR</th>
+
+		<?php if($ShowAnomalyMessage): ?>
+			<th>Messages</th>
+		<?php endif; ?>
 
 		<?php if($AllowEdit): ?>
 			<th>Actions</th>
@@ -50,13 +57,24 @@
 					<?= $Card->Categories->RequirementCardType["Label"]; ?>
 				</td>
 				
-				<td><?= $Card->Stats->Strength; ?></td>
-				<td><?= $Card->Stats->Toughness; ?></td>
-				<td><?= $Card->Stats->Power; ?></td>
-				<td><?= $Card->Stats->Resistance; ?></td>
-				<td><?= $Card->Stats->Health; ?></td>
-				<td><?= $Card->Stats->Mana; ?></td>
-				<td><?= $Card->Stats->Durability; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["STR"]; ?>"><?= $Card->Stats->Strength; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["TGH"]; ?>"><?= $Card->Stats->Toughness; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["PWR"]; ?>"><?= $Card->Stats->Power; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["RES"]; ?>"><?= $Card->Stats->Resistance; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["HP"]; ?>"><?= $Card->Stats->Health; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["MP"]; ?>"><?= $Card->Stats->Mana; ?></td>
+				<td class="<?= \Card\Card::$ColorLookup["Stat"]["DUR"]; ?>"><?= $Card->Stats->Durability; ?></td>
+				
+
+				<?php if($ShowAnomalyMessage): ?>
+					<td>
+						<ol>
+							<?php foreach($Card->AnomalyMessages as $Message): ?>
+								<li><?= $Message; ?></li>
+							<?php endforeach; ?>
+						</ol>
+					</td>
+				<?php endif; ?>
 
 				<?php if($AllowEdit): ?>
 					<td class="table-actions">
@@ -78,7 +96,12 @@
 	</tbody>
 	<tfoot>
 		<tr class="tablesorter-ignoreRow">
-			<th colspan="<?= $AllowEdit ? 14 : 13; ?>" class="ts-pager form-horizontal">
+			<?php
+				$rows = 13;
+				$rows += $AllowEdit ? 1 : 0;
+				$rows += $ShowAnomalyMessage ? 1 : 0;
+			?>
+			<th colspan="<?= $rows; ?>" class="ts-pager form-horizontal">
 				<button type="button" class="btn first deep-purple lighten-2"><i class="small material-icons">first_page</i></button>
 				<button type="button" class="btn prev deep-purple lighten-2"><i class="small material-icons">navigate_before</i></button>
 				<span class="pagedisplay"></span>
@@ -103,7 +126,8 @@
 		fixedWidth: true,
 		widgets: ["filter"],
 		widgetOptions : {
-			filter_reset: ".reset"
+			filter_reset: ".reset",
+      		filter_cssFilter: ["", "", "browser-default", "browser-default", "browser-default", "browser-default"]
 		}
 	}).tablesorterPager({
 		container: $(".ts-pager"),

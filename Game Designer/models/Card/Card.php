@@ -5,6 +5,7 @@
 		
 		class Card {
 			public $Quantity;
+			public $AnomalyMessages = [];
 
 			public $ID;
 			public $Name;
@@ -16,7 +17,7 @@
 
 			public $Modifiers = [];
 
-			public $ColorLookup = [
+			public static $ColorLookup = [
 				"Task" => [
 					"A" => "blue-text text-darken-4",
 					"E" => "green-text text-darken-4",
@@ -79,6 +80,10 @@
 				$this->Stats = new \Card\Stats($Card);
 
 				foreach($Card as $i => $Mod) {
+					if(isset($Mod["AnomalyMessage"])) {
+						$this->AnomalyMessages[] = $Mod["AnomalyMessage"];
+					}
+
 					$this->Modifiers[] = [
 						"Stat" => [],
 						"Target" => [],
@@ -109,6 +114,8 @@
 					$this->Modifiers[$i]["Values"]["Stage"] = (int)$Mod["Stage"];
 					$this->Modifiers[$i]["Values"]["Step"] = (int)$Mod["Step"];
 				}
+
+				$this->AnomalyMessages = array_unique($this->AnomalyMessages);
 
 				return $this;
 			}

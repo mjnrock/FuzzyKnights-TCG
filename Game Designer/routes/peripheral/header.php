@@ -41,15 +41,17 @@
 			}
 		</script>
 
-		<nav>
-			<div class="nav-wrapper deep-purple lighten-1">
+		<nav class="fixed">
+			<div class="nav-wrapper blue darken-1">
 				<ul id="nav-mobile" class="hide-on-med-and-down">
 					<li><a href="<?= "/card/table"; ?>">Cards</a></li>
 					<li><a href="<?= "/deck/table"; ?>">Decks</a></li>
+					<li><a href="<?= "/card/anomaly"; ?>">Anomalies</a></li>
 
 					<li class="right"><input id="nav-search-cardid" type="number" placeholder="Search Card ID" /></li>
 				</ul>
 			</div>
 		</nav>
-		<div class="container">
+		<br /><br /><br /><br />
+		<div class="ml2 mr2">
 			<br />

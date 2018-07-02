@@ -5,7 +5,7 @@
 </div>
 
 <div class="flex mr2 ml2 mt3">
-	<a class="w-100 waves-effect waves-dark btn green b ba green-text text-darken-4" action="Add"><i class="material-icons">add</i></a>
+	<a class="w-100 waves-effect waves-dark btn green lighten-1 white-text" action="Add">Add Modifier</a>
 </div>
 
 <ul>
@@ -15,7 +15,7 @@
 				<div class="col s6">
 					<div>
 						<i class="material-icons">insert_chart</i>
-						<a tcg="Stat" csm-id="<?= $Modifier["CardStatModifierID"];?>" class="dropdown-trigger btn ba white <?= $Card->ColorLookup["Stat"][$Modifier["Stat"]["Short"]]; ?>" href="#" data-target="ul-modifier-stat-<?= $i; ?>"><?= "{$Modifier["Stat"]["Label"]} [{$Modifier["Stat"]["Short"]}]"; ?></a>
+						<a tcg="Stat" csm-id="<?= $Modifier["CardStatModifierID"];?>" class="dropdown-trigger btn ba white <?= \Card\Card::$ColorLookup["Stat"][$Modifier["Stat"]["Short"]]; ?>" href="#" data-target="ul-modifier-stat-<?= $i; ?>"><?= "{$Modifier["Stat"]["Label"]} [{$Modifier["Stat"]["Short"]}]"; ?></a>
 						<ul id="ul-modifier-stat-<?= $i; ?>" tcg="Stat" class="dropdown-content ul-modifier" csm-id="<?= $Modifier["CardStatModifierID"];?>">
 							<?php foreach($Stats as $Stat): ?>
 								<li pkid="<?= $Stat["StatID"]; ?>"><?= "{$Stat["Label"]} [{$Stat["Short"]}]"; ?></li>
@@ -26,7 +26,7 @@
 				<div class="col s6">
 					<div>
 						<i class="material-icons">call_split</i>
-						<a tcg="StatAction" csm-id="<?= $Modifier["CardStatModifierID"];?>"  class="dropdown-trigger btn ba white <?= $Card->ColorLookup["StatAction"]["Foreground"][$Modifier["Stat"]["Action"]["Short"]]; ?>" href="#" data-target="ul-modifier-stat-action-<?= $i; ?>"><?= "{$Modifier["Stat"]["Action"]["Label"]} [{$Modifier["Stat"]["Action"]["Short"]}]"; ?></a>
+						<a tcg="StatAction" csm-id="<?= $Modifier["CardStatModifierID"];?>"  class="dropdown-trigger btn ba white <?= \Card\Card::$ColorLookup["StatAction"]["Foreground"][$Modifier["Stat"]["Action"]["Short"]]; ?>" href="#" data-target="ul-modifier-stat-action-<?= $i; ?>"><?= "{$Modifier["Stat"]["Action"]["Label"]} [{$Modifier["Stat"]["Action"]["Short"]}]"; ?></a>
 						<ul id="ul-modifier-stat-action-<?= $i; ?>" tcg="StatAction" class="dropdown-content ul-modifier" csm-id="<?= $Modifier["CardStatModifierID"];?>">
 							<?php foreach($StatActions as $StatAction): ?>
 								<li pkid="<?= $StatAction["StatActionID"]; ?>"><?= "{$StatAction["Label"]} [{$StatAction["Short"]}]"; ?></li>
@@ -49,7 +49,7 @@
 				<div class="col s6">
 					<div>
 						<i class="material-icons">perm_identity</i>									
-						<a tcg="Target" csm-id="<?= $Modifier["CardStatModifierID"];?>" class="dropdown-trigger btn ba white <?= $Modifier["Target"]["IsFriendly"] ? $Card->ColorLookup["Target"]["Friendly"] : $Card->ColorLookup["Target"]["Enemy"]; ?>" href="#" data-target="ul-modifier-stat-target-<?= $i; ?>"><?= "{$Modifier["Target"]["Label"]} [{$Modifier["Target"]["Short"]}]"; ?></a>
+						<a tcg="Target" csm-id="<?= $Modifier["CardStatModifierID"];?>" class="dropdown-trigger btn ba white <?= $Modifier["Target"]["IsFriendly"] ? \Card\Card::$ColorLookup["Target"]["Friendly"] : \Card\Card::$ColorLookup["Target"]["Enemy"]; ?>" href="#" data-target="ul-modifier-stat-target-<?= $i; ?>"><?= "{$Modifier["Target"]["Label"]} [{$Modifier["Target"]["Short"]}]"; ?></a>
 						<ul id="ul-modifier-stat-target-<?= $i; ?>" tcg="Target" class="dropdown-content ul-modifier" csm-id="<?= $Modifier["CardStatModifierID"];?>">
 							<?php foreach($Targets as $Target): ?>
 								<li pkid="<?= $Target["TargetID"]; ?>"><?= "{$Target["Label"]} [{$Target["Short"]}]"; ?></li>

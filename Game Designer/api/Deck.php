@@ -7,6 +7,8 @@
 
 		if($_GET["Action"] === "UpdateName") {
 			UpdateName($Payload);
+		} else if($_GET["Action"] === "UpdateDescription") {
+			UpdateDescription($Payload);
 		} else if($_GET["Action"] === "UpdateState") {
 			UpdateState($Payload);
 		}
@@ -27,6 +29,27 @@
 			DeckID = {$Payload->DeckID}
 SQL;
 		if(isset($Payload->DeckID) && isset($Payload->Name)) {
+			$result = API::query($SQL);
+
+			echo json_encode($result);
+		}
+	}
+
+	function UpdateDescription($Payload) {
+		$Payload->Description = str_replace("'", "''", $Payload->Description);
+
+		$SQL = <<<SQL
+		UPDATE TCG.Deck
+		SET
+			Description = '{$Payload->Description}',
+			ModifiedDateTime = GETDATE()
+		OUTPUT
+			Inserted.DeckID,
+			Inserted.Description
+		WHERE
+			DeckID = {$Payload->DeckID}
+SQL;
+		if(isset($Payload->DeckID) && isset($Payload->Description)) {
 			$result = API::query($SQL);
 
 			echo json_encode($result);

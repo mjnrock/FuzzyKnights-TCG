@@ -31,54 +31,54 @@
 	<div class="mods-row">
 		<div class="mods-cell ba br2 bw1 red-text text-lighten-3">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(-2, 1, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(-2, 1, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 		<div class="mods-cell ba br2 bw1 red-text text-lighten-3">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(-1, 1, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(-1, 1, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 		<div class="mods-cell ba br2 bw1 red-text text-lighten-3">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(0, 1, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(0, 1, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 		<div class="mods-cell ba br2 bw1 red-text text-lighten-3">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(1, 1, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(1, 1, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 		<div class="mods-cell ba br2 bw1 red-text text-lighten-3">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(2, 1, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(2, 1, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 	</div>
 	<div class="mods-row">
 		<div class="mods-cell ba br2 bw1 green-text text-lighten-2">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(-2, 0, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(-2, 0, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 		<div class="mods-cell ba br2 bw1 green-text text-lighten-2">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(-1, 0, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(-1, 0, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 		<div class="mods-cell ba br2 bw2 green-text text-lighten-1">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(0, 0, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(0, 0, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 		<div class="mods-cell ba br2 bw1 green-text text-lighten-2">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(1, 0, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(1, 0, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 		<div class="mods-cell ba br2 bw1 green-text text-lighten-2">
 			<?php foreach($Card->Modifiers as $Mod): ?>
-				<?php ModCell(2, 0, $Mod, $Card->ColorLookup); ?>
+				<?php ModCell(2, 0, $Mod, \Card\Card::$ColorLookup); ?>
 			<?php endforeach; ?>
 		</div>
 	</div>
