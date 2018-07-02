@@ -8,7 +8,7 @@
 		$Cards[$temp["Name"]][] =  $temp;
 	}
 	foreach($Cards as $i => $Card) {
-		$Cards[$i] = new Card($Card);
+		$Cards[$i] = new \Card\Card($Card);
 	}
 ?>
 
@@ -103,11 +103,7 @@
 	</tfoot>
 </table>
 
-<script>
-	// let table = $("table").DataTable({
-	// 	pageLength: 100
-	// });
-	
+<script>	
 	$("table").tablesorter({
 		theme: "materialize",
 		fixedWidth: true,
@@ -133,7 +129,7 @@
 
 		$("div[action]").on("click", function() {
 			if($(this).attr("action") === "Add") {
-				AJAX("CardUpdateState", {
+				AJAX("Card", "UpdateState", {
 					Action: "Add"
 				}, (e) => {
 					if(e !== null && e !== void 0) {
@@ -145,7 +141,7 @@
 			} else if($(this).attr("action") === "Edit") {
 				location.href = `/card/s/${$(this).parents("tr[card-id]").attr("card-id")}`;
 			} else if($(this).attr("action") === "DeActivate") {
-				AJAX("CardUpdateState", {
+				AJAX("Card", "UpdateState", {
 					CardID: $(this).parents("tr[card-id]").attr("card-id"),
 					Action: "DeActivate"
 				}, (e) => {
@@ -158,7 +154,7 @@
 				});
 			} else if($(this).attr("action") === "Delete") {
 				if(confirm("Are you sure?")) {
-					AJAX("CardUpdateState", {
+					AJAX("Card", "UpdateState", {
 						CardID: $(this).parents("tr[card-id]").attr("card-id"),
 						Action: "Delete"
 					}, (e) => {

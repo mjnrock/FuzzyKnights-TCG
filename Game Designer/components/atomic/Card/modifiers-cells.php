@@ -1,10 +1,10 @@
 <?php
 	if(isset($_GET["CardID"])) {
 		require_once "{$_SERVER["DOCUMENT_ROOT"]}/libs/index.php";
-		require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card.php";
+		require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card/Card.php";
 		
-		$Card = API::query("SELECT * FROM TCG.GetCard({$_GET["CardID"]})");
-		$Card = new Card($Card);
+		$Card = API::query("SELECT * FROM TCG.GetCard({$_GET["CardID"]}) WHERE ModifierIsActive = 1");
+		$Card = new \Card\Card($Card);
 	}
 
 	if(!function_exists("ModCell")) {

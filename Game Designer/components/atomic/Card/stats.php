@@ -39,7 +39,7 @@
 <script>
 	$(document).ready(function() {
 		$("[tcg=card-stat] > input[type=number]").on("blur", function(e) {
-			AJAX("UpdateStat", {
+			AJAX("Card", "UpdateStat", {
 				CardID: $("ul[tcg=card-id]").attr("card-id"),
 				Key: $(this).parent().attr("code"),
 				Value: $(this).val()

@@ -75,7 +75,7 @@
 		}
 		public static function QuickGet($route, $URI) {
 			Router::Route("GET", $route, (function() use ($URI) {
-				require_once "{$_SERVER["DOCUMENT_ROOT"]}/router/{$URI}.php";
+				require_once "{$_SERVER["DOCUMENT_ROOT"]}/routes/{$URI}.php";
 			}));
 		}
 

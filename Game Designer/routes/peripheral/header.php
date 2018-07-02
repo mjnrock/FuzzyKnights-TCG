@@ -28,10 +28,10 @@
 	</head>
 	<body>
 		<script>			
-			function AJAX(action, content, callback) {
+			function AJAX(domain, action, content, callback) {
 				callback = !!callback ? callback : function(e){};
 				$.ajax({
-					url: "/api/ajax.php",
+					url: `/api/${domain}.php`,
 					data: {
 						Action: action,
 						Payload: JSON.stringify(content)

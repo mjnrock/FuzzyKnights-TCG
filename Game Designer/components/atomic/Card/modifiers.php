@@ -1,7 +1,7 @@
 <h6 tcg="card-name" class="tc">Modifiers</h6>
 			
 <div class="cell-injection">
-	<?php include "{$_SERVER["DOCUMENT_ROOT"]}/router/partials/card/modifiers-cells.php"; ?>
+	<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/atomic/Card/modifiers-cells.php"; ?>
 </div>
 
 <div class="flex mr2 ml2 mt3">
@@ -100,19 +100,19 @@
 	$(document).ready(function() {
 		function LoadCells() {
 			$(".cell-injection").empty();
-			$(".cell-injection").load("/router/partials/card/modifiers-cells.php?CardID=<?= $Card->ID; ?>");
+			$(".cell-injection").load("/components/atomic/Card/modifiers-cells.php?CardID=<?= $Card->ID; ?>");
 		}
 
 		$("a[action]").on("click", function(e) {
 			if($(this).attr("action") === "Add") {
-				AJAX("UpdateModifierState", {
+				AJAX("Card", "UpdateModifierState", {
 					CardID: <?= $Card->ID; ?>,
 					Action: "Add"
 				}, (e) => {
 					location.reload();
 				});
 			} else if($(this).attr("action") === "DeActivate") {
-				AJAX("UpdateModifierState", {
+				AJAX("Card", "UpdateModifierState", {
 					CardStatModifierID: $(this).parents("li[csm-id]").attr("csm-id"),
 					Action: "DeActivate"
 				}, (e) => {
@@ -137,7 +137,7 @@
 				});
 			} else if($(this).attr("action") === "Delete") {
 				if(confirm("Are you sure?")) {
-					AJAX("UpdateModifierState", {
+					AJAX("Card", "UpdateModifierState", {
 						CardStatModifierID: $(this).parents("li[csm-id]").attr("csm-id"),
 						Action: "Delete"
 					}, (e) => {
@@ -148,7 +148,7 @@
 		});
 
 		$(".ul-modifier > li").on("click", function(e) {
-			AJAX("UpdateModifier", {
+			AJAX("Card", "UpdateModifier", {
 				CardStatModifierID: $(this).parent().attr("csm-id"),
 				Table: $(this).parent().attr("tcg"),
 				PKID: $(this).attr("pkid")
@@ -190,7 +190,7 @@
 		});
 
 		$("[tcg=card-modifier-values] input[type=number]").on("blur", function(e) {
-			AJAX("UpdateModifier", {
+			AJAX("Card", "UpdateModifier", {
 				CardStatModifierID: $(this).parents("div.row[csm-id]").attr("csm-id"),
 				Key: $(this).attr("tcg"),
 				Value: $(this).val()

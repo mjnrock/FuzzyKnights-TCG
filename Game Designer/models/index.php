@@ -1,6 +1,6 @@
 <?php	
-	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card.php";
-	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Categories.php";
-	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Stats.php";
-	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Deck.php";
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card/Card.php";
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card/Categories.php";
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card/Stats.php";
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Deck/Deck.php";
 ?>

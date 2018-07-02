@@ -1,7 +1,7 @@
 <?php
-	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card.php";
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Card/Card.php";
 	
-	$Card = new Card($Card);
+	$Card = new \Card\Card($Card);
 ?>
 
 <script>
@@ -27,13 +27,13 @@
 			<img tcg="card-picture" src="<?= $Card->Picture; ?>" alt="">
 		</li>
 		<li>
-			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/router/partials/card/categories.php"; ?>
+			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/atomic/card/categories.php"; ?>
 		</li>
 		<li>
-			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/router/partials/card/stats.php"; ?>
+			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/atomic/card/stats.php"; ?>
 		</li>
 		<li>
-			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/router/partials/card/modifiers.php"; ?>
+			<?php include "{$_SERVER["DOCUMENT_ROOT"]}/components/atomic/card/modifiers.php"; ?>
 		</li>
 	</ul>
 </div>

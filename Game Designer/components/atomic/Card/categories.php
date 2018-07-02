@@ -50,7 +50,7 @@
 <script>
 	$(document).ready(function() {
 		$(".ul-category > li").on("click", function(e) {
-			AJAX("UpdateTask", {
+			AJAX("Card", "UpdateTask", {
 				CardID: $("ul[tcg=card-id]").attr("card-id"),
 				Table: $(this).parent().attr("tcg"),
 				Column: $(this).parent().attr("tcg-c"),

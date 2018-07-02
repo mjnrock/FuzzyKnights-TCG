@@ -8,7 +8,7 @@
 		$Decks[$temp["Name"]][] =  $temp;
 	}
 	foreach($Decks as $i => $Deck) {
-		$Decks[$i] = new Deck($Deck);
+		$Decks[$i] = new \Deck\Deck($Deck);
 	}
 ?>
 
@@ -111,7 +111,7 @@
 
 		$("div[action]").on("click", function() {
 			if($(this).attr("action") === "Add") {
-				AJAX("DeckUpdateState", {
+				AJAX("Deck", "UpdateState", {
 					Action: "Add"
 				}, (e) => {
 					if(e !== null && e !== void 0) {
@@ -123,7 +123,7 @@
 			} else if($(this).attr("action") === "Edit") {
 				location.href = `/deck/s/${$(this).parents("tr[deck-id]").attr("deck-id")}`;
 			} else if($(this).attr("action") === "DeActivate") {
-				AJAX("DeckUpdateState", {
+				AJAX("Deck", "UpdateState", {
 					DeckID: $(this).parents("tr[deck-id]").attr("deck-id"),
 					Action: "DeActivate"
 				}, (e) => {
@@ -136,7 +136,7 @@
 				});
 			} else if($(this).attr("action") === "Delete") {
 				if(confirm("Are you sure?")) {
-					AJAX("DeckUpdateState", {
+					AJAX("Deck", "UpdateState", {
 						DeckID: $(this).parents("tr[deck-id]").attr("deck-id"),
 						Action: "Delete"
 					}, (e) => {

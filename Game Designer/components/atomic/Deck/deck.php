@@ -1,7 +1,7 @@
 <?php
-	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Deck.php";
+	require_once "{$_SERVER["DOCUMENT_ROOT"]}/models/Deck/Deck.php";
 	
-	$Deck = new Deck($Deck);
+	$Deck = new \Deck\Deck($Deck);
 	print_r($Deck);
 ?>
 
