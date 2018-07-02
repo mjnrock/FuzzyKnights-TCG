@@ -1,4 +1,4 @@
-<a href="/table" class="btn btn-large w-100 light-blue darken-2 white-text mb3">View All Cards</a>
+<a href="/card/table" class="btn btn-large w-100 light-blue darken-2 white-text mb3">View All Cards</a>
 
 <?php
 	$Tasks = API::Task(NULL, NULL, NULL, "Label");

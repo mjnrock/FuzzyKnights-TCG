@@ -44,7 +44,8 @@
 		<nav>
 			<div class="nav-wrapper deep-purple lighten-1">
 				<ul id="nav-mobile" class="hide-on-med-and-down">
-					<li><a href="<?= "/table"; ?>">Table</a></li>
+					<li><a href="<?= "/card/table"; ?>">Cards</a></li>
+					<li><a href="<?= "/deck/table"; ?>">Decks</a></li>
 
 					<li class="right"><input id="nav-search-cardid" type="number" placeholder="Search Card ID" /></li>
 				</ul>

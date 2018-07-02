@@ -20,6 +20,10 @@
 		if($_GET["Action"] === "CardUpdateState") {
 			Display::CardUpdateState($Payload);
 		}
+
+		if($_GET["Action"] === "DeckUpdateState") {
+			Display::DeckUpdateState($Payload);
+		}
 	}
 
 
@@ -213,6 +217,45 @@ SQL;
 					if($Payload->Action === "Add") {						
 						$SQL = <<<SQL
 						EXEC TCG.QuickCreateCard
+SQL;
+					}
+				}
+				
+				$result = API::query($SQL);
+				echo json_encode($result);
+			}
+		}
+
+		public static function DeckUpdateState($Payload) {
+			if(isset($Payload->Action)) {
+				if(isset($Payload->DeckID)) {
+					if($Payload->Action === "DeActivate") {
+						$SQL = <<<SQL
+						UPDATE TCG.Deck
+						SET
+							DeactivatedDateTime = CASE
+								WHEN DeactivatedDateTime IS NULL THEN GETDATE()
+								ELSE NULL
+							END,
+							ModifiedDateTime = GETDATE()
+						OUTPUT
+							Inserted.DeckID,
+							CASE
+								WHEN Inserted.DeactivatedDateTime IS NULL THEN 1
+								ELSE 0
+							END AS IsActive
+						WHERE
+							DeckID = {$Payload->DeckID}
+SQL;
+					} else if($Payload->Action === "Delete") {
+						$SQL = <<<SQL
+						EXEC TCG.DeleteDeck {$Payload->DeckID};
+SQL;
+					}
+				} else {
+					if($Payload->Action === "Add") {						
+						$SQL = <<<SQL
+						EXEC TCG.QuickCreateDeck
 SQL;
 					}
 				}

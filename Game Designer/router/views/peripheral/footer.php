@@ -2,7 +2,7 @@
 			<script>
 				$(document).ready(function() {
 					$("#nav-search-cardid").on("change", function(e) {
-						window.location.href = `/card/${$("#nav-search-cardid").val()}`;
+						window.location.href = `/card/s/${$("#nav-search-cardid").val()}`;
 					});
 				});
 			</script>

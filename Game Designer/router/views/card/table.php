@@ -13,12 +13,9 @@
 ?>
 
 <div class="flex mr2 ml2 mt3">
-	<div class="w-100 waves-effect waves-dark btn green b ba green-text text-darken-4" action="Add"><i class="material-icons">add</i></div>
+	<div class="w-100 waves-effect waves-dark btn btn-large green b ba green-text text-darken-4" action="Add"><i class="material-icons">add</i></div>
 </div>
-
-<pre>
-	<?php //print_r($Card); ?>
-</pre>
+<br />
 
 <table class="table centered">
 	<thead>
@@ -131,7 +128,7 @@
 		
 	$(document).ready(function() {
 		$("tbody > tr").on("dblclick", function () {
-			window.location.href = `/card/${$(this).attr("card-id")}`;
+			window.location.href = `/card/s/${$(this).attr("card-id")}`;
 		});
 
 		$("div[action]").on("click", function() {
@@ -142,11 +139,11 @@
 					if(e !== null && e !== void 0) {
 						let response = JSON.parse(e)[0];
 						
-						location.href = `/card/${response.CardID}`;
+						location.href = `/card/s/${response.CardID}`;
 					}
 				});
 			} else if($(this).attr("action") === "Edit") {
-				location.href = `/card/${$(this).parents("tr[card-id]").attr("card-id")}`;
+				location.href = `/card/s/${$(this).parents("tr[card-id]").attr("card-id")}`;
 			} else if($(this).attr("action") === "DeActivate") {
 				AJAX("CardUpdateState", {
 					CardID: $(this).parents("tr[card-id]").attr("card-id"),

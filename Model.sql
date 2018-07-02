@@ -615,6 +615,21 @@ FROM
 			c.CardID = cs.CardStatCardID
 GO
 
+CREATE VIEW TCG.vwDeck AS
+SELECT
+	d.DeckID,
+	d.Name,
+	d.[Description],
+	CASE
+		WHEN d.DeactivatedDateTime IS NULL THEN 1
+		ELSE 0
+	END AS IsActive
+FROM
+	TCG.Deck d WITH (NOLOCK)
+	LEFT JOIN TCG.DeckCard dc WITH (NOLOCK)
+		ON d.DeckID = dc.DeckID
+GO
+
 
 
 
@@ -821,5 +836,37 @@ BEGIN
 
 	SELECT
 		@CardID AS CardID;
+END
+GO
+
+CREATE PROCEDURE [TCG].[QuickCreateDeck]
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	INSERT INTO TCG.Deck (Name)
+	OUTPUT
+		Inserted.DeckID
+	VALUES
+		(CAST(NEWID() AS VARCHAR(255)));
+END
+GO
+
+CREATE PROCEDURE TCG.DeleteDeck
+	@DeckID INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	
+    DELETE FROM TCG.DeckCard
+	WHERE
+		DeckID = @DeckID;
+		
+    DELETE FROM TCG.Deck
+	WHERE
+		DeckID = @DeckID;
+
+	SELECT
+		@DeckID AS DeckID;
 END
 GO
