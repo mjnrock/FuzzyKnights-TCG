@@ -18,7 +18,11 @@
 		}
 
 		public static function GetParams() {
-			return explode("/", substr(Router::$Server["PATH_INFO"], 1));	// Removes the preceding "/" via substr()
+			if(isset(Router::$Server["PATH_INFO"])) {
+				return explode("/", substr(Router::$Server["PATH_INFO"], 1));	// Removes the preceding "/" via substr()
+			}
+
+			return [];
 		}
 
 		public static function GetQuery() {
